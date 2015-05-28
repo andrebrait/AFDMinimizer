@@ -46,6 +46,9 @@ public class ArgumentResolver {
 				mapArgs.put(INPUT, args[i]);
 			}
 		}
+		if (mapArgs.get(ORIGINAL).equals(mapArgs.get(MINIMIZED))) {
+			throwValidationException(argList);
+		}
 		HashMap<String, File> returnMap = new HashMap<>(PARAM_NUM);
 		returnMap.put(ORIGINAL, new File(mapArgs.get(ORIGINAL)));
 		returnMap.put(MINIMIZED, new File(mapArgs.get(MINIMIZED)));
