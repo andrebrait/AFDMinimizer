@@ -1,12 +1,14 @@
 package com.lfa.constants;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Classe Alphabet. Basicamente uma classe para armazenar os símbolos do
@@ -16,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 public final class Alphabet {
 
 	public static final String LAMBDA = "\u03BB";
+
+	private final ImmutableMap<String, Symbol> symbolMap;
 
 	/**
 	 * Classe Symbol. Representa um símbolo do alfabeto.
@@ -27,61 +31,66 @@ public final class Alphabet {
 		private final String str;
 
 		/**
-		 * Instancia um novo Symbol.
+		 * Instancia um novo Symbol. Construtor protegido para uso somente por
+		 * classes do pacote.
 		 *
 		 * @param str
 		 *            A string que representa símbolo gráfico.
 		 */
-		public Symbol(String str) {
-			this.str = StringUtils.deleteWhitespace(str);
+		protected Symbol(String str) {
+			this.str = str;
 		}
 
-		public String getStrOrLambda() {
-			return StringUtils.isBlank(str) ? LAMBDA : str;
-		}
 	}
 
-	private final HashSet<Symbol> symbolSet;
-
 	/**
-	 * Instantiates a new alphabet.
+	 * Instancia um novo alfabeto com o conjunto de símbolos passado neste
+	 * construtor.
 	 *
 	 * @param symbols
-	 *            the symbols
-	 */
-	public Alphabet(Collection<String> symbols) {
-		symbolSet = new HashSet<>();
-		for (String str : symbols) {
-			symbolSet.add(new Symbol(str));
-		}
-	}
-
-	/**
-	 * Instantiates a new alphabet.
-	 *
-	 * @param symbol
-	 *            the symbol
+	 *            Os símbolos do alfabeto.
 	 */
 	public Alphabet(String... symbol) {
-		symbolSet = new HashSet<>();
-		for (String str : symbol) {
-			symbolSet.add(new Symbol(str));
-		}
+		this(Arrays.asList(symbol));
 	}
 
 	/**
-	 * Gets the symbol.
+	 * Instancia um novo alfabeto com o conjunto de símbolos passado neste
+	 * construtor.
+	 *
+	 * @param symbol
+	 *            Os símbolos do alfabeto.
+	 */
+	public Alphabet(Collection<String> symbols) {
+		ImmutableMap.Builder<String, Symbol> builder = new ImmutableMap.Builder<>();
+		for (String str : symbols) {
+			str = treat(str);
+			builder.put(str, new Symbol(str));
+		}
+		symbolMap = builder.build();
+	}
+
+	/**
+	 * Retorna o símbolo correspondendo à String passada, ou nulo se não houver.
 	 *
 	 * @param str
-	 *            the str
-	 * @return the symbol
+	 *            A string do símbolo.
+	 * @return O símbolo correspondente.
 	 */
 	public Symbol getSymbol(String str) {
-		for (Symbol sym : symbolSet) {
-			if (sym.equals(str)) {
-				return sym;
-			}
-		}
-		return null;
+		str = treat(str);
+		return symbolMap.get(str);
+	}
+
+	/**
+	 * Trata a String do símbolo de forma que fique apropriada ao uso no
+	 * AFD/APD.
+	 *
+	 * @param str
+	 *            A string do símbolo.
+	 * @return A string tratada.
+	 */
+	private String treat(String str) {
+		return StringUtils.isBlank(str) ? LAMBDA : StringUtils.deleteWhitespace(str);
 	}
 }

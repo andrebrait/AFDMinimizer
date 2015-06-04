@@ -1,7 +1,6 @@
 package com.lfa.constants;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Classe de constantes utilizadas pelo programa e métodos auxiliares.
@@ -9,7 +8,7 @@ import java.util.HashSet;
 public class Constants {
 
 	// Separadores aceitos no arquivo de entrada
-	public static final HashSet<String> SEPARATORS = new HashSet<>(Arrays.asList("(", ")", ",", ";", "->", "{", "}"));
+	public static final ImmutableSet<String> SEPARATORS = ImmutableSet.<String> builder().add("(", ")", ",", ";", "->", "{", "}").build();
 
 	/* Constantes para facilitar formatação */
 	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = "\n";
