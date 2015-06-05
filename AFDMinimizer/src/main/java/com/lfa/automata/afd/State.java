@@ -62,7 +62,7 @@ public class State {
 		}
 		for (Transition transition : transitions) {
 			if (transition.getConsumed().equals(consumed)) {
-				throw new ValidationException("Já existe uma transição para o mesmo símbolo. Estado: " + this.getName() + ". Símbolo da transição: " + consumed.getStr() + ".");
+				throw new ValidationException("Já existe uma transição para o mesmo símbolo." + Constants.NEWLINE + "Estado: " + this.getName() + ". Símbolo da transição: " + consumed.getStr() + ".");
 			}
 		}
 		transitions.add(new Transition(this, consumed, destination));

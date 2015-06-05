@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.ImmutableList;
 import com.lfa.constants.Constants;
 import com.lfa.exception.ValidationException;
 
@@ -20,7 +20,7 @@ public class ArgumentResolver {
 	public static final String INPUT = "input";
 	public static final String DOT_EXT = ".dot", AFD_EXT = ".afd";
 	public static final Integer PARAM_NUM = 3;
-	public static final List<Integer> POSSIBLE_PARAM_NUM = Arrays.asList(2, 4, 6);
+	public static final ImmutableList<Integer> POSSIBLE_PARAM_NUM = ImmutableList.<Integer> builder().add(2, 4, 6).build();
 
 	/**
 	 * Resolve e valida os argumentos recebidos pelo programa. Retorna os
@@ -52,9 +52,7 @@ public class ArgumentResolver {
 			throwValidationException(args);
 		}
 		HashMap<String, File> returnMap = new HashMap<>(PARAM_NUM);
-		for (Entry<String, String> entry : mapArgs.entrySet()) {
-			returnMap.put(entry.getKey(), new File(entry.getValue()));
-		}
+		mapArgs.entrySet().forEach((entry) -> returnMap.put(entry.getKey(), new File(entry.getValue())));
 		return returnMap;
 	}
 
@@ -69,11 +67,8 @@ public class ArgumentResolver {
 	 *            A lista de argumentos
 	 */
 	private static void throwValidationException(String[] args) {
-		String message = "Usar: " + args[0] + " <Opções> [AFD de entrada em formato AFD]" + Constants.NEWLINE;
-		message += Constants.TAB + "Opções:" + Constants.NEWLINE;
-		message += Constants.D_TAB + Constants.OPT_ORIGINAL + Constants.TAB + "AFD original em formato DOT" + Constants.NEWLINE;
-		message += Constants.D_TAB + Constants.OPT_MINIMIZED + Constants.TAB + "AFD reduzido em formato DOT";
-		throw new ValidationException(message);
+		throw new ValidationException(new StringBuilder().append("Usar: ").append(args[0]).append(" <Opções> [AFD de entrada em formato AFD]").append(Constants.NEWLINE).append(Constants.TAB)
+				.append("Opções:").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_ORIGINAL).append(Constants.TAB).append("AFD original em formato DOT")
+				.append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_MINIMIZED).append(Constants.TAB).append("AFD reduzido em formato DOT").toString());
 	}
-
 }

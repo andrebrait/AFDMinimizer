@@ -18,4 +18,7 @@ public class Constants {
 
 	/** O alfabeto do AFD. */
 	public static Alphabet ALPHABET;
+
+	/** O alfabeto do APD de sintaxe */
+	public static final Alphabet ALPHABET_SYNTAX_APD = new Alphabet(SEPARATORS);
 }

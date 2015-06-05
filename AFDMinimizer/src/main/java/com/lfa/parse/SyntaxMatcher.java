@@ -16,11 +16,10 @@ public class SyntaxMatcher {
 	/**
 	 * Validate.
 	 *
-	 * Recebe o arquivo de input em uma linha só e sem espaços e valida a
-	 * sintaxe do mesmo.
+	 * Recebe o arquivo de input em uma linha só e valida a mesma.
 	 *
 	 * @param input
-	 *            A entrada de dados linearizada.
+	 *            A entrada de dados linearizada e sem espaços.
 	 */
 	public static String validate(String input) {
 		input = StringUtils.deleteWhitespace(input);

@@ -91,6 +91,6 @@ public final class Alphabet {
 	 * @return A string tratada.
 	 */
 	private String treat(String str) {
-		return StringUtils.isBlank(str) ? LAMBDA : StringUtils.deleteWhitespace(str);
+		return StringUtils.defaultIfBlank(StringUtils.deleteWhitespace(str), Alphabet.LAMBDA);
 	}
 }
