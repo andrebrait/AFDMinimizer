@@ -21,6 +21,12 @@ public class State {
 	private final HashSet<Transition> transitions;
 
 	/**
+	 * O próximo estado, sendo ele o estado de destino da última trannsição
+	 * percorrida.
+	 */
+	private State next;
+
+	/**
 	 * Instantiates a new state.
 	 *
 	 * @param name
@@ -66,5 +72,9 @@ public class State {
 			}
 		}
 		transitions.add(new Transition(this, consumed, destination));
+	}
+
+	public String consume(String str) {
+		return null;
 	}
 }
