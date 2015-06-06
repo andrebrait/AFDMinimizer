@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -119,7 +120,7 @@ public class APDState extends State {
 			if (CollectionUtils.isEmpty(colStr)) {
 				digestAndAddString(returnList, StringUtils.EMPTY);
 			} else {
-				col.forEach((str) -> digestAndAddString(returnList, str));
+				col.forEach(str -> digestAndAddString(returnList, str));
 			}
 		});
 
@@ -153,7 +154,42 @@ public class APDState extends State {
 	 */
 	private String getPopCommaSeparatedString(Collection<String> toPop) {
 		StringBuilder builder = new StringBuilder();
-		toPop.forEach((str) -> builder.append(str).append(", "));
+		toPop.forEach(str -> builder.append(str).append(", "));
 		return builder.delete(builder.length() - 2, builder.length() - 1).toString();
+	}
+
+	@Override
+	public APDState getNext() {
+		return (APDState) super.getNext();
+	}
+
+	@Deprecated
+	@Override
+	public String consume(String str) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("Operação não suportada para APD.");
+	}
+
+	public String consume(String str, Stack<String> stack) {
+		String firstChar = StringUtils.left(str, 1);
+		for (Transition trans : getTransitions()) {
+			APDTransition apdTrans = (APDTransition) trans;
+			String consumed = apdTrans.getConsumed().getStr();
+			if (consumed.equals(Alphabet.LAMBDA) || consumed.equals(str)) {
+				popPush(apdTrans, stack);
+				setNext(apdTrans.getDestination());
+				return consumed.equals(Alphabet.LAMBDA) ? str : StringUtils.removeStart(str, firstChar);
+			}
+		}
+		throw new ValidationException("Transição não encontrada para o símbolo presente." + Constants.NEWLINE + "Símbolo: " + firstChar + ".");
+	}
+
+	private void popPush(APDTransition apdTrans, Stack<String> stack) {
+		apdTrans.getToPop().reverse().forEach(pop -> {
+			if (!StringUtils.equals(pop, stack.pop())) {
+				stack.push(pop);
+				throw new ValidationException("Não foi possível desempilhar " + pop + " no estado " + getName() + Constants.NEWLINE + "Stack no momento: " + stack.toString() + ".");
+			}
+		});
+		apdTrans.getToPush().forEach(push -> stack.push(push));
 	}
 }
