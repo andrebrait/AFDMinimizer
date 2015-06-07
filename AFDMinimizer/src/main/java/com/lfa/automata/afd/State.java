@@ -5,6 +5,8 @@ import java.util.HashSet;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.lfa.constants.Alphabet;
 import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.constants.Constants;
@@ -74,7 +76,21 @@ public class State {
 		transitions.add(new Transition(this, consumed, destination));
 	}
 
+	/**
+	 * Consome o primeiro símbolo da string e passa ao próximo estado.
+	 *
+	 * @param str
+	 *            A string
+	 * @return A string original menos o caractere consumido.
+	 */
 	public String consume(String str) {
-		return null;
+		String firstChar = StringUtils.left(str, 1);
+		for (Transition trans : getTransitions()) {
+			if (trans.getConsumed().equals(firstChar)) {
+				setNext(trans.getDestination());
+				return StringUtils.removeStart(str, firstChar);
+			}
+		}
+		throw new ValidationException("Transição não encontrada para o símbolo presente no estado " + getName() + "." + Constants.NEWLINE + "Símbolo: " + firstChar + ". String: " + str + ".");
 	}
 }

@@ -1,22 +1,26 @@
 package com.lfa.automata.apd;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.Stack;
+import java.util.Deque;
 
 import lombok.Data;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.ImmutableSet;
+import com.lfa.automata.Automata;
 
 /**
  * A classe APD. Representa um APD.
  */
 @Data
-public class APD {
+public class APD implements Automata {
 
 	private final APDState initialState;
 	private final ImmutableSet<APDState> states;
 	private final ImmutableSet<APDState> finalStates;
-	private final Stack<String> stack;
+	private final Deque<String> stack;
 
 	/**
 	 * Instancia um novo APD.
@@ -32,11 +36,15 @@ public class APD {
 		this.initialState = initialState;
 		this.states = ImmutableSet.<APDState> builder().addAll(states).build();
 		this.finalStates = ImmutableSet.<APDState> builder().addAll(finalStates).build();
-		this.stack = new Stack<>();
+		this.stack = new ArrayDeque<>();
 	}
 
+	@Override
 	public void run(String str) {
-
+		APDState present = initialState;
+		while (!(finalStates.contains(present) && stack.isEmpty() && StringUtils.isEmpty(str))) {
+			str = present.consume(str, stack);
+			present = present.getNext();
+		}
 	}
-
 }

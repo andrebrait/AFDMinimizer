@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 public class Constants {
 
 	// Separadores aceitos no arquivo de entrada
-	public static final ImmutableSet<String> SEPARATORS = ImmutableSet.<String> builder().add("(", ")", ",", ";", "->", "{", "}").build();
+	public static final ImmutableSet<String> SEPARATORS = ImmutableSet.<String> builder().add("(", ")", ":", ",", ";", "->", "{", "}").build();
 
 	/* Constantes para facilitar formatação */
 	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = "\n";
@@ -20,5 +20,5 @@ public class Constants {
 	public static Alphabet ALPHABET;
 
 	/** O alfabeto do APD de sintaxe */
-	public static final Alphabet ALPHABET_SYNTAX_APD = new Alphabet(SEPARATORS);
+	public static final Alphabet ALPHABET_APD = new Alphabet(SEPARATORS);
 }
