@@ -36,16 +36,45 @@ public class SyntaxMatcher {
 	private static APD createValidationAPD() {
 		APDState a = new APDState("A");
 		APDState b = new APDState("B");
-		a.addTransition("(", StringUtils.EMPTY, "FZYX", b);
 		APDState c = new APDState("C");
-		b.addTransition(")", "X", StringUtils.EMPTY, c);
 		APDState d = new APDState("D");
-		c.addTransition(":", "Y", StringUtils.EMPTY, d);
 		APDState e = new APDState("E");
+
+		a.addTransition("(", StringUtils.EMPTY, "ZYX", a);
+		a.addTransition(")", "X", StringUtils.EMPTY, a);
+		a.addTransition(":", "Y", StringUtils.EMPTY, a);
+		a.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, a);
+		a.addTransition(";", "Z", "1", b);
+
+		b.addTransition("(", StringUtils.EMPTY, "YX", b);
+		b.addTransition(")", "X", StringUtils.EMPTY, b);
+		b.addTransition(":", "Y", StringUtils.EMPTY, b);
+		b.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, b);
+		b.addTransition(";", "1", "2", c);
+
+		c.addTransition("(", StringUtils.EMPTY, "YX", c);
+		c.addTransition(")", "X", StringUtils.EMPTY, c);
+		c.addTransition(":", "Y", StringUtils.EMPTY, c);
+		c.addTransition("-", "2", "K", c);
+		c.addTransition(">", "K", "L", c);
+		c.addTransition("{", "L", "M", c);
+		c.addTransition(",", "M", "N", c);
+		c.addTransition("}", "N", "O", c);
+		c.addTransition(",", "O", "2", c);
+		c.addTransition(";", "O", "3", d);
+
+		d.addTransition("(", StringUtils.EMPTY, "YX", d);
+		d.addTransition(")", "X", StringUtils.EMPTY, d);
+		d.addTransition(":", "Y", StringUtils.EMPTY, d);
 		d.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, d);
-		d.addTransition(";", "Z", StringUtils.EMPTY, e);
+		d.addTransition(";", "3", "4", e);
+
+		e.addTransition("(", StringUtils.EMPTY, "YX", d);
+		e.addTransition(")", "X", StringUtils.EMPTY, d);
+		e.addTransition(":", "Y", StringUtils.EMPTY, d);
+		e.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, d);
+		e.addTransition(";", "3", StringUtils.EMPTY, e);
 
 		return new APD(a, Arrays.asList(a, b, c, d, e), Arrays.asList(e));
 	}
-
 }
