@@ -34,18 +34,42 @@ public class SyntaxMatcher {
 	}
 
 	private static APD createValidationAPD() {
+		APDState in = new APDState("IN");
 		APDState a = new APDState("A");
 		APDState b = new APDState("B");
-		a.addTransition("(", StringUtils.EMPTY, "FZYX", b);
 		APDState c = new APDState("C");
-		b.addTransition(")", "X", StringUtils.EMPTY, c);
+		in.addTransition(StringUtils.EMPTY, StringUtils.EMPTY, "Z", a);
+		a.addTransition("(", StringUtils.EMPTY, "YX", a);
+		a.addTransition(")", "X", StringUtils.EMPTY, a);
+		a.addTransition(":", "Y", StringUtils.EMPTY, a);
+		a.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, a);
+		a.addTransition(";", "Z", "1", b);
+
+		b.addTransition("(", StringUtils.EMPTY, "YX", b);
+		b.addTransition(")", "X", StringUtils.EMPTY, b);
+		b.addTransition(":", "Y", StringUtils.EMPTY, b);
+		b.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, b);
+		b.addTransition(";", "1", "2", c);
+
 		APDState d = new APDState("D");
-		c.addTransition(":", "Y", StringUtils.EMPTY, d);
+
+
 		APDState e = new APDState("E");
-		d.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, d);
-		d.addTransition(";", "Z", StringUtils.EMPTY, e);
+
+		// Segundo "loop" de estados, para A
+		APDState f = new APDState("F");
+		e.addTransition("(", StringUtils.EMPTY, "ZYX", f);
+		APDState g = new APDState("G");
+		f.addTransition(")", "X", StringUtils.EMPTY, g);
+		APDState h = new APDState("H");
+		g.addTransition(":", "Y", StringUtils.EMPTY, h);
+		h.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, h);
+		APDState i = new APDState("I");
+		h.addTransition(";", "Z", StringUtils.EMPTY, i);
+		//"loop" de reconhecimento das trannsições com -> {,}, ... ;
+		APDState j = new APDState("J");
+		i.addTransition("")
 
 		return new APD(a, Arrays.asList(a, b, c, d, e), Arrays.asList(e));
 	}
-
 }
