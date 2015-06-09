@@ -176,6 +176,10 @@ public class APDState extends State {
 		} else if (CollectionUtils.isEmpty(col) || !str.equals(Alphabet.LAMBDA)) {
 			CollectionUtils.addAll(col, str.split("(?!^)"));
 		}
+
+		if (!(col.contains(Alphabet.LAMBDA) || CollectionUtils.containsAll(Constants.ALPHABET_APD_STACK.getSymbolMap().keySet(), col))) {
+			throw new ValidationException("Símbolo não presente no alfabeto de pilha: " + CollectionUtils.removeAll(col, Constants.ALPHABET_APD_STACK.getSymbolMap().keySet()) + ".");
+		}
 	}
 
 	@Override

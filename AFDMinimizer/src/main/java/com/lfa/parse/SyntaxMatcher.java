@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.lfa.automata.apd.APD;
 import com.lfa.automata.apd.APDState;
+import com.lfa.constants.Alphabet;
 import com.lfa.constants.Constants;
 
 /**
@@ -36,6 +37,10 @@ public class SyntaxMatcher {
 	}
 
 	private static APD createValidationAPD() {
+
+		Constants.ALPHABET_APD = new Alphabet(Constants.SEPARATORS);
+		Constants.ALPHABET_APD_STACK = new Alphabet("X", "Y", "Z", "1", "2", "K", "L", "M", "N", "O", "3", "4");
+
 		APDState a = new APDState("A");
 		APDState b = new APDState("B");
 		APDState c = new APDState("C");

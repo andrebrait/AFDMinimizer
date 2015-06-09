@@ -1,5 +1,6 @@
 package com.lfa.automata;
 
+
 public interface Automata {
 
 	/**

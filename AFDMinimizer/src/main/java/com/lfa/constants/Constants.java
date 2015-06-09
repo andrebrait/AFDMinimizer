@@ -20,7 +20,9 @@ public class Constants {
 	public static Alphabet ALPHABET;
 
 	/** O alfabeto do APD de sintaxe */
-	public static final Alphabet ALPHABET_APD = new Alphabet(SEPARATORS);
+	public static Alphabet ALPHABET_APD;
+
+	public static Alphabet ALPHABET_APD_STACK;
 
 	/**
 	 * Constantes para identificar as letras que serão usadas na entrada para
