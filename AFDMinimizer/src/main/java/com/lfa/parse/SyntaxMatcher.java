@@ -30,6 +30,8 @@ public class SyntaxMatcher {
 		List<String> decomposedInput = Arrays.asList(StringUtils.splitByCharacterType(input.toUpperCase()));
 		Collection<String> intersect = CollectionUtils.retainAll(decomposedInput, Constants.SEPARATORS);
 		createValidationAPD().run(StringUtils.join(intersect.toArray(), StringUtils.EMPTY));
+		Collection<String> consistencyStr = CollectionUtils.removeAll(decomposedInput, CollectionUtils.removeAll(Constants.SEPARATORS, Arrays.asList(";")));
+
 		return input;
 	}
 
@@ -69,12 +71,18 @@ public class SyntaxMatcher {
 		d.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, d);
 		d.addTransition(";", "3", "4", e);
 
-		e.addTransition("(", StringUtils.EMPTY, "YX", d);
-		e.addTransition(")", "X", StringUtils.EMPTY, d);
-		e.addTransition(":", "Y", StringUtils.EMPTY, d);
-		e.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, d);
-		e.addTransition(";", "3", StringUtils.EMPTY, e);
+		e.addTransition("(", StringUtils.EMPTY, "YX", e);
+		e.addTransition(")", "X", StringUtils.EMPTY, e);
+		e.addTransition(":", "Y", StringUtils.EMPTY, e);
+		e.addTransition(",", StringUtils.EMPTY, StringUtils.EMPTY, e);
+		e.addTransition(";", "4", StringUtils.EMPTY, e);
 
 		return new APD(a, Arrays.asList(a, b, c, d, e), Arrays.asList(e));
+	}
+
+	private static void checkSizesConsistency(Collection<String> input) {
+		for (String str : input) {
+
+		}
 	}
 }

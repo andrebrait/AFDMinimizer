@@ -21,4 +21,11 @@ public class Constants {
 
 	/** O alfabeto do APD de sintaxe */
 	public static final Alphabet ALPHABET_APD = new Alphabet(SEPARATORS);
+
+	/**
+	 * Constantes para identificar as letras que serão usadas na entrada para
+	 * declarar estados, alfabeto, transições, estados iniciais e estados
+	 * finais.
+	 */
+	public static final String I_STATES = "E", I_ALPHABET = "A", I_TRANSITIONS = "T", I_INITIAL = "I", I_FINAL = "F";
 }
