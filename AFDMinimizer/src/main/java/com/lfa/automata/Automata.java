@@ -1,5 +1,7 @@
 package com.lfa.automata;
 
+import com.google.common.collect.ImmutableSet;
+import com.lfa.automata.afd.State;
 
 public interface Automata {
 
@@ -10,5 +12,26 @@ public interface Automata {
 	 *            A string de entrada.
 	 */
 	void run(String str);
+
+	/**
+	 * Retorna o estado inicial do autômato.
+	 *
+	 * @return Os estado inicial do autômato.
+	 */
+	State getInitialState();
+
+	/**
+	 * Retorna o conjunto imutável de estados de um autômato.
+	 *
+	 * @return Os estados do autômato.
+	 */
+	ImmutableSet<? extends State> getStates();
+
+	/**
+	 * Retorna o conjunto imutável de estados iniais de um autômato.
+	 *
+	 * @return Os estados finais do autômato.
+	 */
+	ImmutableSet<? extends State> getFinalStates();
 
 }

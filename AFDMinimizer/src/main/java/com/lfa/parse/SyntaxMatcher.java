@@ -26,14 +26,13 @@ public class SyntaxMatcher {
 	 * @param input
 	 *            A entrada de dados linearizada e sem espaços.
 	 */
-	public static String validate(String input) {
+	public static Collection<String> validate(String input) {
 		input = StringUtils.deleteWhitespace(input);
 		List<String> decomposedInput = Arrays.asList(StringUtils.splitByCharacterType(input.toUpperCase()));
 		Collection<String> intersect = CollectionUtils.retainAll(decomposedInput, Constants.SEPARATORS);
 		createValidationAPD().run(StringUtils.join(intersect.toArray(), StringUtils.EMPTY));
 		Collection<String> consistencyStr = CollectionUtils.removeAll(decomposedInput, CollectionUtils.removeAll(Constants.SEPARATORS, Arrays.asList(";")));
-
-		return input;
+		return consistencyStr;
 	}
 
 	private static APD createValidationAPD() {
@@ -83,11 +82,5 @@ public class SyntaxMatcher {
 		e.addTransition(";", "4", StringUtils.EMPTY, e);
 
 		return new APD(a, Arrays.asList(a, b, c, d, e), Arrays.asList(e));
-	}
-
-	private static void checkSizesConsistency(Collection<String> input) {
-		for (String str : input) {
-
-		}
 	}
 }
