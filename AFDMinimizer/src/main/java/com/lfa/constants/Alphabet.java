@@ -20,6 +20,7 @@ public final class Alphabet {
 	public static final String LAMBDA = "\u03BB";
 
 	private final ImmutableMap<String, Symbol> symbolMap;
+	private final ImmutableMap<Integer, Symbol> ordinalMap;
 
 	/**
 	 * Classe Symbol. Representa um símbolo do alfabeto.
@@ -63,11 +64,16 @@ public final class Alphabet {
 	 */
 	public Alphabet(Collection<String> symbols) {
 		ImmutableMap.Builder<String, Symbol> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<Integer, Symbol> ordinalBuilder = new ImmutableMap.Builder<>();
+		int order = 0;
 		for (String str : symbols) {
 			str = treat(str);
-			builder.put(str, new Symbol(str));
+			Symbol sym = new Symbol(str);
+			builder.put(str, sym);
+			ordinalBuilder.put(order++, sym);
 		}
 		symbolMap = builder.build();
+		ordinalMap = ordinalBuilder.build();
 	}
 
 	/**

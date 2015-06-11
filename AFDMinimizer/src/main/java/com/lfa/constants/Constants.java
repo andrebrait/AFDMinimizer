@@ -2,9 +2,10 @@ package com.lfa.constants;
 
 import java.util.Arrays;
 
+import lombok.Getter;
+
 import org.apache.commons.collections4.CollectionUtils;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -13,17 +14,26 @@ import com.google.common.collect.ImmutableSet;
 public class Constants {
 
 	/**
-	 * Constantes para identificar as letras que serão usadas na entrada para
+	 * Ennum para identificar as letras que serão usadas na entrada para
 	 * declarar estados, alfabeto, transições, estados iniciais e estados
 	 * finais.
 	 */
-	public static final String I_STATES = "E", I_ALPHABET = "A", I_TRANSITIONS = "T", I_INITIAL = "I", I_FINAL = "F";
+	public static enum Initial {
+
+		STATES("E"), ALPHABET("A"), TRANSITIONS("T"), INITIAL("I"), FINAL("F");
+
+		@Getter
+		private String initialLetter;
+
+		private Initial(String initialLetter) {
+			this.initialLetter = initialLetter;
+		}
+	}
 
 	// Separadores aceitos no arquivo de entrada
 	public static final String OPEN_PAR = "(", CLOSE_PAR = ")", COLON = ":", COMMA = ",", DASH = "-", ARROW = ">", OPEN_BRACKET = "{", CLOSE_BRACKET = "}", SEMICOLON = ";";
 	public static final ImmutableSet<String> SEPARATORS = ImmutableSet.<String> builder().add(OPEN_PAR, CLOSE_PAR, COLON, COMMA, DASH, ARROW, OPEN_BRACKET, CLOSE_BRACKET).build();
 	public static final ImmutableSet<String> SEPARATORS_MINUS_SEMICOLON = ImmutableSet.<String> builder().addAll(CollectionUtils.subtract(SEPARATORS, Arrays.asList(SEMICOLON))).build();
-	public static final ImmutableMap<Integer, String> LINE_MAP = ImmutableMap.of(0, I_STATES, 1, I_ALPHABET, 2, I_TRANSITIONS, 3, I_INITIAL, 4, I_FINAL);
 	public static final int LINES = 5;
 
 	/* Constantes para facilitar formatação */
@@ -38,5 +48,6 @@ public class Constants {
 	/** O alfabeto do APD de sintaxe */
 	public static Alphabet ALPHABET_APD;
 
+	/** O alfabeto da pilha do APD. */
 	public static Alphabet ALPHABET_APD_STACK;
 }
