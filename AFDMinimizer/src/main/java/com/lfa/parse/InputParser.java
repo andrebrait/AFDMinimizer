@@ -23,10 +23,9 @@ import com.lfa.exception.ValidationException;
  */
 public class InputParser {
 
-	public static HashSet<State> states;
-
 	public static AFD parse(String input) {
-		List<List<String>> lineList = breakBySemicolon(SyntaxMatcher.validate(input));
+		List<String> validatedInput = SyntaxMatcher.validate(input);
+		List<List<String>> lineList = breakBySemicolon(validatedInput);
 		if (lineList.size() != Constants.LINES) {
 			throwGenericValidationException();
 		}
@@ -65,9 +64,7 @@ public class InputParser {
 		return new Alphabet(symbolSet);
 	}
 
-	// TODO Parse de transições
-
-	private static State parseInitialState(List<List<String>> lineList, Map<String, State> map) {
+	private static State parseInitialState(List<List<String>> lineList, Map<String, State> stateMap) {
 		Initial initial = Initial.INITIAL;
 		List<String> line = lineList.get(initial.ordinal());
 		checkInitial(line, initial);
@@ -76,11 +73,11 @@ public class InputParser {
 			throw new ValidationException("Há mais de um estado inicial declarado.");
 		}
 		String name = line.get(2);
-		checkDeclared(name, map);
-		return map.get(name);
+		checkDeclared(name, stateMap);
+		return stateMap.get(name);
 	}
 
-	private static HashSet<State> parseFinalStates(List<List<String>> lineList, Map<String, State> map) {
+	private static HashSet<State> parseFinalStates(List<List<String>> lineList, Map<String, State> stateMap) {
 		Initial initial = Initial.FINAL;
 		List<String> line = lineList.get(initial.ordinal());
 		checkInitial(line, initial);
@@ -88,12 +85,47 @@ public class InputParser {
 		HashSet<State> states = new HashSet<>(line.size() - 2);
 		for (int i = 2; i < line.size(); i++) {
 			String str = line.get(i);
-			checkDeclared(str, map);
-			State state = map.get(str);
+			checkDeclared(str, stateMap);
+			State state = stateMap.get(str);
 			checkRepeated(state, states);
 			states.add(state);
 		}
 		return states;
+	}
+
+	private static void parseAndAddTransitions(List<List<String>> lineList, Map<String, State> stateMap) {
+		Initial initial = Initial.TRANSITIONS;
+		List<String> line = lineList.get(initial.ordinal());
+		checkInitial(line, initial);
+
+		// Checagem de tamanho especial para as transições
+		int numDeclaredTransitions = getNumberOfParams(line, initial);
+
+		int realLineSize = line.size() - 2;
+
+		// Sabendo que as transições de cada estado são expressas como
+		// (n+1)tuplas de valores em que n é o número de símbolos no alfabeto e
+		// o símbolo a mais é o estado de origem, podemos calcular o número de
+		// entradas neste campo dividindo-o em listas de n+1 elementos.
+		int transitionSize = Constants.ALPHABET.size() + 1;
+		int modTransitionSize = realLineSize % transitionSize;
+
+		if (modTransitionSize != 0) {
+			throwGenericValidationException();
+		}
+
+		int numActualTransitions = realLineSize / transitionSize;
+		if (numActualTransitions != numDeclaredTransitions) {
+			throwWrongParamNumberException(numActualTransitions < numDeclaredTransitions, initial);
+		}
+
+		List<List<String>> transitionStrings = new ArrayList<>(numDeclaredTransitions);
+		List<String> subLine = line.subList(2, line.size());
+		for (int i = 0; i < line.size(); i++) {
+			if (i % transitionSize == 0) {
+
+			}
+		}
 	}
 
 	private static List<List<String>> breakBySemicolon(List<String> inputList) {
@@ -131,9 +163,9 @@ public class InputParser {
 	}
 
 	private static void genericSizeCheck(List<String> line, Initial initial) {
-		int numOfParameters = getNumberOfParams(line, initial);
-		if (numOfParameters + 2 != line.size()) {
-			throw new ValidationException("Há " + (numOfParameters + 2 < line.size() ? "menos" : "mais") + " parâmetros do que o declarado. Linha ou separador: " + (initial.ordinal() + 1) + ".");
+		int numParameters = getNumberOfParams(line, initial);
+		if (numParameters + 2 != line.size()) {
+			throwWrongParamNumberException(numParameters + 2 < line.size(), initial);
 		}
 	}
 
@@ -151,6 +183,10 @@ public class InputParser {
 		if (!map.containsKey(name)) {
 			throw new ValidationException("O estado " + name + " não foi declarado antes de ser usado em uma transição ou ser determinado como inicial ou final.");
 		}
+	}
+
+	private static void throwWrongParamNumberException(boolean less, Initial initial) {
+		throw new ValidationException("Há " + (less ? "menos" : "mais") + " parâmetros do que o declarado. Linha ou separador: " + (initial.ordinal() + 1) + ".");
 	}
 
 	private static void throwGenericValidationException() {

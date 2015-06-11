@@ -88,6 +88,19 @@ public final class Alphabet {
 		return symbolMap.get(str);
 	}
 
+	public Symbol getSymbol(Integer index) {
+		return ordinalMap.get(index);
+	}
+
+	/**
+	 * Retorna o tamanho do alfabeto.
+	 *
+	 * @return O tamanho do alfabeto.
+	 */
+	public int size() {
+		return symbolMap.size();
+	}
+
 	/**
 	 * Trata a String do símbolo de forma que fique apropriada ao uso no
 	 * AFD/APD.
@@ -99,4 +112,5 @@ public final class Alphabet {
 	private String treat(String str) {
 		return StringUtils.defaultIfBlank(StringUtils.deleteWhitespace(str), Alphabet.LAMBDA);
 	}
+
 }
