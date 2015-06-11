@@ -3,6 +3,10 @@ package com.lfa.automata;
 import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.afd.State;
 
+/**
+ * Interface Automata. Contém os métodos que todos os autômatos devem poder
+ * executar, incluindo o processamento de uma entrada dada em uma String.
+ */
 public interface Automata {
 
 	/**

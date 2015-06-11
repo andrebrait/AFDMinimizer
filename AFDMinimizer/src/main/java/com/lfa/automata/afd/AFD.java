@@ -9,6 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.Automata;
 
+/**
+ * A classe AFD. Representa um AFD no sistema. É capaz de reconhecer palavras
+ * através do método run.
+ */
 @Data
 public class AFD implements Automata {
 

@@ -1,10 +1,9 @@
 package com.lfa.parse;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.lfa.automata.apd.APD;
@@ -26,12 +25,12 @@ public class SyntaxMatcher {
 	 * @param input
 	 *            A entrada de dados linearizada e sem espaços.
 	 */
-	public static Collection<String> validate(String input) {
+	public static List<String> validate(String input) {
 		input = StringUtils.deleteWhitespace(input);
 		List<String> decomposedInput = Arrays.asList(StringUtils.splitByCharacterType(input.toUpperCase()));
-		Collection<String> intersect = CollectionUtils.retainAll(decomposedInput, Constants.SEPARATORS);
+		List<String> intersect = ListUtils.retainAll(decomposedInput, Constants.SEPARATORS);
 		createValidationAPD().run(StringUtils.join(intersect.toArray(), StringUtils.EMPTY));
-		Collection<String> consistencyStr = CollectionUtils.removeAll(decomposedInput, CollectionUtils.removeAll(Constants.SEPARATORS, Arrays.asList(";")));
+		List<String> consistencyStr = ListUtils.removeAll(decomposedInput, Constants.SEPARATORS_MINUS_SEMICOLON);
 		return consistencyStr;
 	}
 
