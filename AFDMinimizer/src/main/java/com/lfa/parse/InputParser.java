@@ -124,16 +124,27 @@ public class InputParser {
 		for (int i = 0; i < line.size(); i += transitionSize) {
 			transitionStrings.add(subLine.subList(i, i + transitionSize));
 		}
+
+		for (List<String> loopLine : transitionStrings) {
+
+		}
 	}
 
 	private static List<List<String>> breakBySemicolon(List<String> inputList) {
 		List<List<String>> returnList = new ArrayList<>();
-		int endIndex = 0;
-		for (int i = 0; i < inputList.size(); i += endIndex) {
-			endIndex = inputList.indexOf(Constants.SEMICOLON) + 1;
-			List<String> toAdd = inputList.subList(i, endIndex);
-			if(CollectionUtils.isNotEmpty(toAdd))
-			returnList.add(toAdd);
+		for (int i = 0; i < inputList.size(); i++) {
+			List<String> subList = new ArrayList<String>();
+			for (int j = i; j < inputList.size(); j++) {
+				String str = inputList.get(j);
+				if (str.equals(Constants.SEMICOLON)) {
+					i = j;
+					break;
+				}
+				subList.add(str);
+			}
+			if (CollectionUtils.isNotEmpty(subList)) {
+				returnList.add(subList);
+			}
 		}
 		return returnList;
 	}
