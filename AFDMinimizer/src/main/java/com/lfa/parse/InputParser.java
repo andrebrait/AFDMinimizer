@@ -131,19 +131,9 @@ public class InputParser {
 		int endIndex = 0;
 		for (int i = 0; i < inputList.size(); i += endIndex) {
 			endIndex = inputList.indexOf(Constants.SEMICOLON) + 1;
-			returnList.add(inputList.subList(i, endIndex));
-			List<String> subList = new ArrayList<String>();
-			for (int j = i; j < inputList.size(); j++) {
-				String str = inputList.get(j);
-				if (str.equals(Constants.SEMICOLON)) {
-					i = j;
-					break;
-				}
-				subList.add(str);
-			}
-			if (CollectionUtils.isNotEmpty(subList)) {
-				returnList.add(subList);
-			}
+			List<String> toAdd = inputList.subList(i, endIndex);
+			if(CollectionUtils.isNotEmpty(toAdd))
+			returnList.add(toAdd);
 		}
 		return returnList;
 	}
