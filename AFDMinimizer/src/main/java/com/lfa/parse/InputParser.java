@@ -121,16 +121,17 @@ public class InputParser {
 
 		List<List<String>> transitionStrings = new ArrayList<>(numDeclaredTransitions);
 		List<String> subLine = line.subList(2, line.size());
-		for (int i = 0; i < line.size(); i++) {
-			if (i % transitionSize == 0) {
-
-			}
+		for (int i = 0; i < line.size(); i += transitionSize) {
+			transitionStrings.add(subLine.subList(i, i + transitionSize));
 		}
 	}
 
 	private static List<List<String>> breakBySemicolon(List<String> inputList) {
 		List<List<String>> returnList = new ArrayList<>();
-		for (int i = 0; i < inputList.size(); i++) {
+		int endIndex = 0;
+		for (int i = 0; i < inputList.size(); i += endIndex) {
+			endIndex = inputList.indexOf(Constants.SEMICOLON) + 1;
+			returnList.add(inputList.subList(i, endIndex));
 			List<String> subList = new ArrayList<String>();
 			for (int j = i; j < inputList.size(); j++) {
 				String str = inputList.get(j);
