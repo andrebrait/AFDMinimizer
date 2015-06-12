@@ -17,8 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.lfa.automata.afd.State;
 import com.lfa.automata.afd.Transition;
 import com.lfa.constants.Alphabet;
-import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.constants.Constants;
+import com.lfa.constants.Symbol;
 import com.lfa.exception.ValidationException;
 
 /**

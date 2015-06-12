@@ -29,11 +29,16 @@ public class SyntaxMatcher {
 		input = StringUtils.deleteWhitespace(input);
 		List<String> decomposedInput = Arrays.asList(StringUtils.splitByCharacterType(input.toUpperCase()));
 		List<String> intersect = ListUtils.retainAll(decomposedInput, Constants.SEPARATORS);
-		createValidationAPD().run(StringUtils.join(intersect.toArray()));
+		createValidationAPD().run(StringUtils.join(intersect.toArray(), StringUtils.EMPTY));
 		List<String> consistencyStr = ListUtils.removeAll(decomposedInput, Constants.SEPARATORS_MINUS_SEMICOLON);
 		return consistencyStr;
 	}
 
+	/**
+	 * Cria um APD de validação para a sintaxe do AFD.
+	 *
+	 * @return O APD de validação.
+	 */
 	private static APD createValidationAPD() {
 
 		Constants.ALPHABET_APD = new Alphabet(Constants.SEPARATORS);

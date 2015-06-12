@@ -8,14 +8,14 @@ import lombok.ToString;
 
 import com.google.common.collect.ImmutableList;
 import com.lfa.automata.afd.Transition;
-import com.lfa.constants.Alphabet.Symbol;
+import com.lfa.constants.Symbol;
 
 /**
  * Classe APDTransition. Trata uma transição do APD.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = { "toPop", "toPush" })
+@ToString(callSuper = true, of = { "toPop", "toPush" })
 public class APDTransition extends Transition {
 
 	private final ImmutableList<String> toPop;

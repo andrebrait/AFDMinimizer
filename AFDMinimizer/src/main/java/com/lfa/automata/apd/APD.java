@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Deque;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,6 +17,8 @@ import com.lfa.automata.Automata;
  * A classe APD. Representa um APD.
  */
 @Data
+@EqualsAndHashCode(callSuper = false, of = { "initialState", "states", "finalStates" })
+@ToString(callSuper = false, of = { "initialState", "states", "finalStates", "stack" })
 public class APD implements Automata {
 
 	private final APDState initialState;

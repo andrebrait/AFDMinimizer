@@ -4,19 +4,21 @@ import java.util.HashSet;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.lfa.constants.Alphabet;
-import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.constants.Constants;
+import com.lfa.constants.Symbol;
 import com.lfa.exception.ValidationException;
 
 /**
  * Classe State. Representa um estado de um AFD.
  */
 @Data
-@EqualsAndHashCode(of = "name")
+@EqualsAndHashCode(callSuper = false, of = "name")
+@ToString(callSuper = false, of = { "name" })
 public class State {
 
 	private final String name;

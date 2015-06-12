@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,34 +16,14 @@ import com.google.common.collect.ImmutableMap;
  * alfabeto do AFD.
  */
 @Data
+@EqualsAndHashCode(callSuper = false, of = { "symbolMap", "ordinalMap" })
+@ToString(callSuper = false, of = { "symbolMap", "ordinalMap" })
 public final class Alphabet {
 
 	public static final String LAMBDA = "\u03BB";
 
 	private final ImmutableMap<String, Symbol> symbolMap;
 	private final ImmutableMap<Integer, Symbol> ordinalMap;
-
-	/**
-	 * Classe Symbol. Representa um símbolo do alfabeto.
-	 */
-	@Data
-	@EqualsAndHashCode(of = "str")
-	public final static class Symbol {
-
-		private final String str;
-
-		/**
-		 * Instancia um novo Symbol. Construtor protegido para uso somente por
-		 * classes do pacote.
-		 *
-		 * @param str
-		 *            A string que representa símbolo gráfico.
-		 */
-		protected Symbol(String str) {
-			this.str = str;
-		}
-
-	}
 
 	/**
 	 * Instancia um novo alfabeto com o conjunto de símbolos passado neste

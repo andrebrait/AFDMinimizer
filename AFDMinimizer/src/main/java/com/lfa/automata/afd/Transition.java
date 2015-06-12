@@ -1,10 +1,14 @@
 package com.lfa.automata.afd;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import com.lfa.constants.Alphabet.Symbol;
+import com.lfa.constants.Symbol;
 
 @Data
+@EqualsAndHashCode(callSuper = false, of = { "consumed", "source" })
+@ToString(callSuper = false, of = { "source", "destination" })
 public class Transition {
 
 	private final Symbol consumed;
