@@ -29,7 +29,7 @@ public class SyntaxMatcher {
 		input = StringUtils.deleteWhitespace(input);
 		List<String> decomposedInput = Arrays.asList(StringUtils.splitByCharacterType(input.toUpperCase()));
 		List<String> intersect = ListUtils.retainAll(decomposedInput, Constants.SEPARATORS);
-		createValidationAPD().run(StringUtils.join(intersect.toArray(), StringUtils.EMPTY));
+		createValidationAPD().run(StringUtils.join(intersect.toArray()));
 		List<String> consistencyStr = ListUtils.removeAll(decomposedInput, Constants.SEPARATORS_MINUS_SEMICOLON);
 		return consistencyStr;
 	}

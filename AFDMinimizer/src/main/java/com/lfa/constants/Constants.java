@@ -32,14 +32,23 @@ public class Constants {
 
 	// Separadores aceitos no arquivo de entrada
 	public static final String OPEN_PAR = "(", CLOSE_PAR = ")", COLON = ":", COMMA = ",", DASH = "-", ARROW = ">", OPEN_BRACKET = "{", CLOSE_BRACKET = "}", SEMICOLON = ";";
-	public static final ImmutableSet<String> SEPARATORS = ImmutableSet.<String> builder().add(OPEN_PAR, CLOSE_PAR, COLON, COMMA, DASH, ARROW, OPEN_BRACKET, CLOSE_BRACKET).build();
+
+	/** Os separadores na sintaxe do arquivo de entrada */
+	public static final ImmutableSet<String> SEPARATORS = ImmutableSet.<String> builder().add(OPEN_PAR, CLOSE_PAR, COLON, COMMA, DASH, ARROW, OPEN_BRACKET, CLOSE_BRACKET, SEMICOLON).build();
+
+	/** Os separadores na sintaxe do arquivo exceto ponto-e-vírgula */
 	public static final ImmutableSet<String> SEPARATORS_MINUS_SEMICOLON = ImmutableSet.<String> builder().addAll(CollectionUtils.subtract(SEPARATORS, Arrays.asList(SEMICOLON))).build();
+
+	/** Número de linhas ou separadores aceitas na entrada */
 	public static final int LINES = 5;
 
 	/* Constantes para facilitar formatação */
 	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = "\n";
 
+	/** Constante da opção de arquivo de saída com AFD original */
 	public static final String OPT_ORIGINAL = "-o";
+
+	/** Constante da opção de arquivo de saída com AFD minimizado */
 	public static final String OPT_MINIMIZED = "-m";
 
 	/** O alfabeto do AFD. */
@@ -50,4 +59,22 @@ public class Constants {
 
 	/** O alfabeto da pilha do APD. */
 	public static Alphabet ALPHABET_APD_STACK;
+
+	/** Constante da opção de arquivo de entrada */
+	public static final String INPUT = "input";
+
+	/** Constante da extensão dos arquivos de entrada. */
+	public static final String DOT_EXT = ".dot", AFD_EXT = ".afd";
+
+	/**
+	 * O número máximo de parâmetros de linha de comando que este programa
+	 * aceita
+	 */
+	public static final Integer PARAM_NUM = 3;
+
+	/**
+	 * Números possíveis de parâmetros (contando nome do programa e nomes dos
+	 * arquivos) que este programa pode receber
+	 */
+	public static final ImmutableSet<Integer> POSSIBLE_PARAM_NUM = ImmutableSet.<Integer> builder().add(2, 4, 6).build();
 }
