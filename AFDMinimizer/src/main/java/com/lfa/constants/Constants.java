@@ -3,6 +3,7 @@ package com.lfa.constants;
 import java.util.Arrays;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -18,6 +19,7 @@ public class Constants {
 	 * declarar estados, alfabeto, transições, estados iniciais e estados
 	 * finais.
 	 */
+	@ToString(callSuper = false, of = "initialLetter")
 	public static enum Initial {
 
 		STATES("E"), ALPHABET("A"), TRANSITIONS("T"), INITIAL("I"), FINAL("F");

@@ -16,8 +16,8 @@ import com.google.common.collect.ImmutableMap;
  * alfabeto do AFD.
  */
 @Data
-@EqualsAndHashCode(callSuper = false, of = { "symbolMap", "ordinalMap" })
-@ToString(callSuper = false, of = { "symbolMap", "ordinalMap" })
+@EqualsAndHashCode(callSuper = false, of = { "ordinalMap" })
+@ToString(callSuper = false, of = { "ordinalMap" })
 public final class Alphabet {
 
 	public static final String LAMBDA = "\u03BB";

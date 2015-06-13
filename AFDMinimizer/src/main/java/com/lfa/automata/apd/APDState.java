@@ -20,6 +20,7 @@ import com.lfa.constants.Alphabet;
 import com.lfa.constants.Constants;
 import com.lfa.constants.Symbol;
 import com.lfa.exception.ValidationException;
+import com.lfa.exception.ValidationException.ErrorType;
 
 /**
  * Classe APDState. Classe desenhada para representar os estados de um APD. Não
@@ -123,7 +124,7 @@ public class APDState extends State {
 	 */
 	public void addTransition(Symbol consumed, Collection<String> toPop, Collection<String> toPush, APDState destination) {
 		if (consumed == null || destination == null) {
-			throw new ValidationException("Destino ou símbolo nulo ou inexistente no alfabeto.");
+			throw new ValidationException(ErrorType.APD, "Destino ou símbolo nulo ou inexistente no alfabeto.");
 		}
 		toPop = treat(toPop);
 		toPush = treat(toPush);
@@ -131,7 +132,7 @@ public class APDState extends State {
 			APDTransition apdTrans = (APDTransition) trans;
 			if (apdTrans.getConsumed().equals(consumed)
 					&& (apdTrans.getToPop().contains(Alphabet.LAMBDA) || toPop.contains(Alphabet.LAMBDA) || CollectionUtils.isEqualCollection(apdTrans.getToPop(), toPop))) {
-				throw new ValidationException("Já existe uma transição para o mesmo símbolo com desempilhamento ambíguo." + Constants.NEWLINE + "Estado: " + this.getName()
+				throw new ValidationException(ErrorType.APD, "Já existe uma transição para o mesmo símbolo com desempilhamento ambíguo." + Constants.NEWLINE + "Estado: " + this.getName()
 						+ ". Símbolo da transição: " + consumed.getStr() + "." + Constants.NEWLINE + "Símbolo do empilhamento existente: " + apdTrans.getToPop() + "." + Constants.NEWLINE
 						+ "Símbolo do empilhamento inserido: " + apdTrans.getToPop() + ".");
 			}
@@ -178,7 +179,7 @@ public class APDState extends State {
 		}
 
 		if (!(col.contains(Alphabet.LAMBDA) || CollectionUtils.containsAll(Constants.ALPHABET_APD_STACK.getSymbolMap().keySet(), col))) {
-			throw new ValidationException("Símbolo não presente no alfabeto de pilha: " + CollectionUtils.removeAll(col, Constants.ALPHABET_APD_STACK.getSymbolMap().keySet()) + ".");
+			throw new ValidationException(ErrorType.APD, "Símbolo não presente no alfabeto de pilha: " + CollectionUtils.removeAll(col, Constants.ALPHABET_APD_STACK.getSymbolMap().keySet()) + ".");
 		}
 	}
 
@@ -215,8 +216,8 @@ public class APDState extends State {
 				return consumed.equals(Alphabet.LAMBDA) ? str : StringUtils.removeStart(str, firstChar);
 			}
 		}
-		throw new ValidationException("Transição não encontrada para o símbolo presente no estado " + getName() + "." + Constants.NEWLINE + "Símbolo: " + firstChar + ". String: " + str + "."
-				+ Constants.NEWLINE + "Stack: " + stack + ".");
+		throw new ValidationException(ErrorType.APD, "Transição não encontrada para o símbolo presente no estado " + getName() + "." + Constants.NEWLINE + "Símbolo: " + firstChar + ". String: " + str
+				+ "." + Constants.NEWLINE + "Stack: " + stack + ".");
 	}
 
 	/**
@@ -259,8 +260,8 @@ public class APDState extends State {
 			}
 			String str = CollectionUtils.isEmpty(stack) ? null : stack.pop();
 			if (!StringUtils.equals(pop, str)) {
-				throw new ValidationException("Não foi possível desempilhar " + pop + " no estado " + getName() + Constants.NEWLINE + "Stack no momento: " + str + StringUtils.SPACE + stack.toString()
-						+ ".");
+				throw new ValidationException(ErrorType.APD, "Não foi possível desempilhar " + pop + " no estado " + getName() + Constants.NEWLINE + "Stack no momento: " + str + StringUtils.SPACE
+						+ stack.toString() + ".");
 			}
 		}
 		for (String push : apdTrans.getToPush()) {

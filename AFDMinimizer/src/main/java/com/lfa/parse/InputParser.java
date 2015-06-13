@@ -16,6 +16,7 @@ import com.lfa.constants.Alphabet;
 import com.lfa.constants.Constants;
 import com.lfa.constants.Constants.Initial;
 import com.lfa.exception.ValidationException;
+import com.lfa.exception.ValidationException.ErrorType;
 
 /**
  * Classe InputParser. É utilizada para processar o arquivo de entrada do
@@ -105,7 +106,7 @@ public class InputParser {
 		checkInitial(line, initial);
 		genericSizeCheck(line, initial);
 		if (line.size() > 3) {
-			throw new ValidationException("Há mais de um estado inicial declarado.");
+			throw new ValidationException(ErrorType.INPUT_PARSE, "Há mais de um estado inicial declarado.");
 		}
 		String name = line.get(2);
 		checkDeclared(name, stateMap);
@@ -250,7 +251,8 @@ public class InputParser {
 			Integer paramNumber = Integer.parseInt(line.get(1));
 			return paramNumber.intValue();
 		} catch (NumberFormatException ex) {
-			throw new ValidationException("Número de parâmetros deve ser um número válido." + Constants.NEWLINE + "Número da linha ou separador: " + (initial.ordinal() + 1) + ".");
+			throw new ValidationException(ErrorType.INPUT_PARSE, "Número de parâmetros deve ser um número válido." + Constants.NEWLINE + "Número da linha ou separador: " + (initial.ordinal() + 1)
+					+ ".");
 		}
 	}
 
@@ -297,7 +299,7 @@ public class InputParser {
 	 */
 	private static <E> void checkRepeated(E value, Set<E> set) {
 		if (set.contains(value)) {
-			throw new ValidationException("Estados ou transições com declaração repetida.");
+			throw new ValidationException(ErrorType.INPUT_PARSE, "Estados ou transições com declaração repetida.");
 		}
 	}
 
@@ -311,7 +313,7 @@ public class InputParser {
 	 */
 	private static void checkDeclared(String name, Map<String, State> map) {
 		if (!map.containsKey(name)) {
-			throw new ValidationException("O estado " + name + " não foi declarado antes de ser usado em uma transição ou ser determinado como inicial ou final.");
+			throw new ValidationException(ErrorType.INPUT_PARSE, "O estado " + name + " não foi declarado antes de ser usado em uma transição ou ser determinado como inicial ou final.");
 		}
 	}
 
@@ -324,14 +326,14 @@ public class InputParser {
 	 *            A inicial da linha na qual ocorreu a falha.
 	 */
 	private static void throwWrongParamNumberException(boolean less, Initial initial) {
-		throw new ValidationException("Há " + (less ? "menos" : "mais") + " parâmetros do que o declarado. Linha ou separador: " + (initial.ordinal() + 1) + ".");
+		throw new ValidationException(ErrorType.INPUT_PARSE, "Há " + (less ? "menos" : "mais") + " parâmetros do que o declarado. Linha ou separador: " + (initial.ordinal() + 1) + ".");
 	}
 
 	/**
 	 * Joga uma exceção de validação genérica.
 	 */
 	private static void throwGenericValidationException() {
-		throw new ValidationException("Arquivo de entrada em formato inválido: há parâmetros fora de ordem, faltantes ou em excesso.");
+		throw new ValidationException(ErrorType.INPUT_PARSE, "Arquivo de entrada em formato inválido: há parâmetros fora de ordem, faltantes ou em excesso.");
 	}
 
 }

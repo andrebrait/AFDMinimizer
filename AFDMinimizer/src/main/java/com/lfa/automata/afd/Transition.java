@@ -7,8 +7,8 @@ import lombok.ToString;
 import com.lfa.constants.Symbol;
 
 @Data
-@EqualsAndHashCode(callSuper = false, of = { "consumed", "source" })
-@ToString(callSuper = false, of = { "source", "destination" })
+@EqualsAndHashCode(callSuper = false, of = { "source", "consumed", "destination" })
+@ToString(callSuper = false, of = { "source", "consumed", "destination" })
 public class Transition {
 
 	private final Symbol consumed;
