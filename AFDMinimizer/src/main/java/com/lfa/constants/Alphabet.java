@@ -20,6 +20,29 @@ import com.google.common.collect.ImmutableMap;
 @ToString(callSuper = false, of = { "ordinalMap" })
 public final class Alphabet {
 
+	/**
+	 * Classe Symbol. Representa um símbolo do alfabeto.
+	 */
+	@Data
+	@EqualsAndHashCode(callSuper = false, of = "str")
+	@ToString(callSuper = false, of = "str")
+	public static final class Symbol {
+
+		private final String str;
+
+		/**
+		 * Instancia um novo Symbol. Construtor protegido para uso somente por
+		 * classes do pacote.
+		 *
+		 * @param str
+		 *            A string que representa símbolo gráfico.
+		 */
+		protected Symbol(String str) {
+			this.str = str;
+		}
+
+	}
+
 	public static final String LAMBDA = "\u03BB";
 
 	private final ImmutableMap<String, Symbol> symbolMap;
@@ -44,16 +67,16 @@ public final class Alphabet {
 	 *            Os símbolos do alfabeto.
 	 */
 	public Alphabet(Collection<String> symbols) {
-		ImmutableMap.Builder<String, Symbol> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<String, Symbol> symbolBuilder = new ImmutableMap.Builder<>();
 		ImmutableMap.Builder<Integer, Symbol> ordinalBuilder = new ImmutableMap.Builder<>();
 		int order = 0;
 		for (String str : symbols) {
 			str = treat(str);
 			Symbol sym = new Symbol(str);
-			builder.put(str, sym);
+			symbolBuilder.put(str, sym);
 			ordinalBuilder.put(order++, sym);
 		}
-		symbolMap = builder.build();
+		symbolMap = symbolBuilder.build();
 		ordinalMap = ordinalBuilder.build();
 	}
 

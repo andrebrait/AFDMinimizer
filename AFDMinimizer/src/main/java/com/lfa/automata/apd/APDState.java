@@ -14,11 +14,11 @@ import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.collect.ImmutableList;
 import com.lfa.automata.afd.State;
-import com.lfa.automata.afd.Transition;
 import com.lfa.constants.Alphabet;
+import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.constants.Constants;
-import com.lfa.constants.Symbol;
 import com.lfa.exception.ValidationException;
 import com.lfa.exception.ValidationException.ErrorType;
 
@@ -31,6 +31,40 @@ import com.lfa.exception.ValidationException.ErrorType;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class APDState extends State {
+
+	/**
+	 * Classe APDTransition. Representa uma transição de estado de um APD
+	 */
+	@Data
+	@EqualsAndHashCode(callSuper = true, of = { "toPop", "toPush" })
+	@ToString(callSuper = true, of = { "toPop", "toPush" })
+	public static class APDTransition extends Transition {
+
+		private final ImmutableList<String> toPop;
+		private final ImmutableList<String> toPush;
+
+		/**
+		 * Instancia uma nova transição de APD.
+		 *
+		 * @param source
+		 *            O estado de origem.
+		 * @param consumed
+		 *            O símbolo consumido.
+		 * @param toPop
+		 *            As strings para retirar do topo da pilha (na ordem inversa
+		 *            da remoção)
+		 * @param toPush
+		 *            As strings para colocar no topo da pilha (na ordem de
+		 *            inserção)
+		 * @param destination
+		 *            O estado de destino
+		 */
+		protected APDTransition(APDState source, Symbol consumed, Collection<String> toPop, Collection<String> toPush, APDState destination) {
+			super(source, consumed, destination);
+			this.toPop = ImmutableList.<String> builder().addAll(toPop).build();
+			this.toPush = ImmutableList.<String> builder().addAll(toPush).build();
+		}
+	}
 
 	/**
 	 * Instancia um novo estado de APD.

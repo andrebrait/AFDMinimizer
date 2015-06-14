@@ -9,8 +9,8 @@ import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import com.lfa.constants.Alphabet;
+import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.constants.Constants;
-import com.lfa.constants.Symbol;
 import com.lfa.exception.ValidationException;
 import com.lfa.exception.ValidationException.ErrorType;
 
@@ -21,6 +21,35 @@ import com.lfa.exception.ValidationException.ErrorType;
 @EqualsAndHashCode(callSuper = false, of = "name")
 @ToString(callSuper = false, of = "name")
 public class State {
+
+	/**
+	 * Classe Transition. Representa uma transição de estado de um AFD.
+	 */
+	@Data
+	@EqualsAndHashCode(callSuper = false, of = { "source", "consumed", "destination" })
+	@ToString(callSuper = false, of = { "source", "consumed", "destination" })
+	public static class Transition {
+
+		private final Symbol consumed;
+		private final State source;
+		private final State destination;
+
+		/**
+		 * Instancia uma nova transição.
+		 *
+		 * @param source
+		 *            O estado de origem.
+		 * @param consumed
+		 *            O símbolo consumido.
+		 * @param destination
+		 *            O estado de destino.
+		 */
+		protected Transition(State source, Symbol consumed, State destination) {
+			this.source = source;
+			this.consumed = consumed;
+			this.destination = destination;
+		}
+	}
 
 	private final String name;
 	private final LinkedHashSet<Transition> transitions;
