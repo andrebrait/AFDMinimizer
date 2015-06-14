@@ -11,6 +11,7 @@ import com.lfa.automata.afd.AFD;
 import com.lfa.automata.afd.State;
 import com.lfa.automata.afd.State.Transition;
 import com.lfa.constants.Alphabet.Symbol;
+import com.lfa.minimize.Group.GroupBuilder;
 
 /**
  * Classe AFDMinimizer. Contém métodos para minimizar um AFD e gerar um AFD de
@@ -24,11 +25,14 @@ public class AFDMinimizer {
 		HashSet<Group> groups = new HashSet<>();
 		boolean modified;
 
+		// Definindo a transição dos grupos iniciais:
+		groups.addAll(GroupBuilder.buildInitialGroups(original));
+
 		// Grupo de estados não-finais
-		groups.add(new Group(CollectionUtils.removeAll(original.getStates(), original.getFinalStates())));
+		groups.add(Group.builder().addAll(CollectionUtils.removeAll(original.getStates(), original.getFinalStates())).add());
 
 		// Grupo de estados finais
-		groups.add(new Group(original.getFinalStates()));
+		groups.add(Group.builder().addAll(original.getFinalStates()).build());
 
 		// Atualizando as transições características de cada grupo com base no
 		// primeiro estado de cada um.
