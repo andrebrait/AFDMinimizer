@@ -33,7 +33,7 @@ import com.lfa.exception.ValidationException.ErrorType;
  */
 @Data
 @EqualsAndHashCode(callSuper = false, of = "name")
-@ToString(callSuper = false, of = { "name", "states", "groupTransitions" })
+@ToString(callSuper = false, of = "name")
 public final class Group {
 
 	/**
@@ -46,7 +46,9 @@ public final class Group {
 	@ToString(callSuper = false, of = { "consumed", "destination" })
 	public final static class GroupTransition {
 		private final Symbol consumed;
-		private final Group destination;
+
+		@Setter(AccessLevel.PROTECTED)
+		private Group destination;
 
 		/**
 		 * Instancia uma nova GroupTransition.
@@ -58,7 +60,7 @@ public final class Group {
 		 * @param destination
 		 *            O grupo de destino.
 		 */
-		private GroupTransition(Symbol consumed, Group destination) {
+		protected GroupTransition(Symbol consumed, Group destination) {
 			this.consumed = consumed;
 			this.destination = destination;
 		}
@@ -69,6 +71,7 @@ public final class Group {
 	 * que adições de estados e transições podem ser feitas somente através
 	 * deste builder.
 	 */
+	@ToString(callSuper = false, of = "name")
 	public final static class GroupBuilder {
 
 		private static int NUM_GROUPS = 0;
@@ -116,10 +119,22 @@ public final class Group {
 			return buildProcess();
 		}
 
+		/**
+		 * Processo de construção de um grupo, para uso interno da classe.
+		 *
+		 * @return O novo grupo construído.
+		 */
 		private Group buildProcess() {
 			return new Group(name, states, groupTransitions);
 		}
 
+		/**
+		 * Constrói os grupos iniciais de um AFD.
+		 *
+		 * @param original
+		 *            O AFD original.
+		 * @return the O conjunto de estados iniciais criados.
+		 */
 		public static Set<Group> buildInitialGroups(AFD original) {
 
 			if (builtInitial) {
@@ -130,8 +145,20 @@ public final class Group {
 				Group nonFinalGroup = builder().addAll(CollectionUtils.removeAll(original.getStates(), original.getFinalStates())).buildProcess();
 				Group finalGroup = builder().addAll(original.getFinalStates()).buildProcess();
 
-				State nonFinalState = nonFinalGroup.getStates().iterator().next();
-				State finalState = finalGroup.getStates().iterator().next();
+				State nonFinalState = null;
+				for (State state : nonFinalGroup.getStates()) {
+					if (!state.getTransitions().isEmpty()) {
+						nonFinalState = state;
+						break;
+					}
+				}
+				State finalState = null;
+				for (State state : finalGroup.getStates()) {
+					if (!state.getTransitions().isEmpty()) {
+						finalState = state;
+						break;
+					}
+				}
 
 				ImmutableSet.Builder<GroupTransition> builderNonFinal = ImmutableSet.builder();
 				ImmutableSet.Builder<GroupTransition> builderFinal = ImmutableSet.builder();
@@ -257,7 +284,7 @@ public final class Group {
 	private final HashSet<State> states;
 
 	@Getter(value = AccessLevel.PROTECTED)
-	@Setter(value = AccessLevel.PRIVATE)
+	@Setter(value = AccessLevel.PROTECTED)
 	private ImmutableSet<GroupTransition> groupTransitions;
 
 	/**
@@ -296,6 +323,15 @@ public final class Group {
 	}
 
 	/**
+	 * Retorna o tamanho do grupo.
+	 *
+	 * @return O tamanho do grupo.
+	 */
+	public int size() {
+		return this.states.size();
+	}
+
+	/**
 	 * Verifica se um estado pertence ao grupo.
 	 *
 	 * @param state
@@ -304,6 +340,30 @@ public final class Group {
 	 */
 	public boolean contains(State state) {
 		return states.contains(state);
+	}
+
+	/**
+	 * Verifica se qualquer um dos estados pertence ao grupo.
+	 *
+	 * @param states
+	 *            Os estados
+	 * @return true, se ao menos um pertencer ao grupo
+	 */
+	public boolean containsAny(Collection<State> states) {
+		return CollectionUtils.containsAny(getStates(), states);
+	}
+
+	/**
+	 * Verifica se o grupo contém a transição passada.
+	 *
+	 * @param consumed
+	 *            O símbolo consumido pela transição.
+	 * @param destination
+	 *            O grupo de destino.
+	 * @return true, se contiver.
+	 */
+	public boolean containsTransition(Symbol consumed, Group destination) {
+		return groupTransitions.contains(new GroupTransition(consumed, destination));
 	}
 
 	/**

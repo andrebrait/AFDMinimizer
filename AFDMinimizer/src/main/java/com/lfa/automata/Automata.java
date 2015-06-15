@@ -38,4 +38,11 @@ public interface Automata {
 	 */
 	ImmutableSet<? extends State> getFinalStates();
 
+	/**
+	 * Retorna o tamanho do autômato.
+	 *
+	 * @return O tamanho do autômato.
+	 */
+	public int size();
+
 }

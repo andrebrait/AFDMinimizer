@@ -5,17 +5,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 
-import com.lfa.argsolve.ArgumentResolver;
 import com.lfa.automata.afd.AFD;
-import com.lfa.constants.Constants;
 import com.lfa.exception.ValidationException;
-import com.lfa.exception.ValidationException.ErrorType;
+import com.lfa.minimize.AFDMinimizer;
 import com.lfa.parse.InputParser;
 
 /**
@@ -29,29 +24,35 @@ public class MainClass {
 
 		try {
 
-			Map<String, File> fileMap = ArgumentResolver.resolveArguments(args);
+			// Map<String, File> fileMap =
+			// ArgumentResolver.resolveArguments(args);
 
 			File inputFile = null;
-			String input = null;
+			String input = "E(6):A,B,C,D,E,F; A(2):0,1; T(2): A->{A,B}, B->{D,C}; I(1):A; F(1):A;";
 			Charset detectedCharSet = null;
 
-			try {
-				inputFile = fileMap.get(Constants.INPUT);
-				detectedCharSet = detectCharSet(inputFile);
-				input = StringUtils.join(Files.readAllLines(inputFile.toPath(), detectedCharSet), StringUtils.EMPTY);
-			} catch (IOException e) {
-				throw new ValidationException(ErrorType.OTHER, "Não foi possível abrir o arquivo de entrada: " + inputFile.getPath());
-			}
+			// try {
+			// inputFile = fileMap.get(Constants.INPUT);
+			// detectedCharSet = detectCharSet(inputFile);
+			// input = StringUtils.join(Files.readAllLines(inputFile.toPath(),
+			// detectedCharSet), StringUtils.EMPTY);
+			// } catch (IOException e) {
+			// throw new ValidationException(ErrorType.OTHER,
+			// "Não foi possível abrir o arquivo de entrada: " +
+			// inputFile.getPath());
+			// }
 
 			AFD inputAFD = InputParser.parse(input);
 
-			if (fileMap.containsKey(Constants.OPT_ORIGINAL)) {
-				// TODO fazer método de saída de AFD em arquivo.
-			}
+			// if (fileMap.containsKey(Constants.OPT_ORIGINAL)) {
+			// // TODO fazer método de saída de AFD em arquivo.
+			// }
+			//
+			// if (fileMap.containsKey(Constants.OPT_MINIMIZED)) {
+			// // TODO fazer método de saída de AFD em arquivo.
+			// }
 
-			if (fileMap.containsKey(Constants.OPT_MINIMIZED)) {
-				// TODO fazer método de saída de AFD em arquivo.
-			}
+			AFD output = AFDMinimizer.minimize(inputAFD);
 
 		} catch (ValidationException ex) {
 			System.out.println("Erro: " + ex.getMessage());

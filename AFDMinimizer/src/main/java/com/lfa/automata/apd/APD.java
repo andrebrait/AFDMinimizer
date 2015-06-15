@@ -51,4 +51,9 @@ public class APD implements Automata {
 			present = present.getNext();
 		}
 	}
+
+	@Override
+	public int size() {
+		return states.size();
+	}
 }

@@ -49,4 +49,9 @@ public class AFD implements Automata {
 		}
 	}
 
+	@Override
+	public int size() {
+		return states.size();
+	}
+
 }

@@ -1,17 +1,18 @@
 package com.lfa.minimize;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.afd.AFD;
 import com.lfa.automata.afd.State;
 import com.lfa.automata.afd.State.Transition;
-import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.minimize.Group.GroupBuilder;
+import com.lfa.minimize.Group.GroupTransition;
 
 /**
  * Classe AFDMinimizer. Contém métodos para minimizar um AFD e gerar um AFD de
@@ -21,53 +22,100 @@ public class AFDMinimizer {
 
 	public static AFD minimize(AFD original) {
 
-		int groupNum = 1;
 		HashSet<Group> groups = new HashSet<>();
-		boolean modified;
+		boolean modified = false;
 
 		// Definindo a transição dos grupos iniciais:
 		groups.addAll(GroupBuilder.buildInitialGroups(original));
 
-		// Grupo de estados não-finais
-		groups.add(Group.builder().addAll(CollectionUtils.removeAll(original.getStates(), original.getFinalStates())).add());
-
-		// Grupo de estados finais
-		groups.add(Group.builder().addAll(original.getFinalStates()).build());
-
-		// Atualizando as transições características de cada grupo com base no
-		// primeiro estado de cada um.
-		updateGroupTransitions(groups);
-
 		do {
-			HashSet<Group> newGroups = new HashSet<>();
+			HashSet<GroupBuilder> groupsToAdd = new HashSet<>();
 			for (Group group : groups) {
-				Iterator<State> i = group.iterator();
-				while (i.hasNext()) {
-					State current = i.next();
-					for (Transition transition : current.getTransitions()) {
-						if (!matchTransitions(current, group)) {
-
+				if (group.size() == 1) {
+					continue;
+				}
+				HashSet<State> statesToRemoveFromThisGroup = new HashSet<>();
+				HashSet<GroupBuilder> groupBuildersForThisGroup = new HashSet<>();
+				for (State state : group.getStates()) {
+					for (Transition trans : state.getTransitions()) {
+						if (!group.containsTransition(trans.getConsumed(), findGroup(groups, trans.getDestination()))) {
+							GroupBuilder groupBuilderToAdd = findGroupBuilder(groups, groupBuildersForThisGroup, state);
+							if (groupBuilderToAdd != null) {
+								groupBuilderToAdd.add(state);
+							} else {
+								groupBuildersForThisGroup.add(createGroup(groups, state));
+							}
+							statesToRemoveFromThisGroup.add(state);
+							break;
 						}
 					}
 				}
+				groupsToAdd.addAll(groupBuildersForThisGroup);
+				group.removeAll(statesToRemoveFromThisGroup);
+			}
+			modified = CollectionUtils.isNotEmpty(groupsToAdd);
+			for (GroupBuilder newGroup : groupsToAdd) {
+				groups.add(newGroup.build());
 			}
 		} while (modified);
 
-	}
+		updateTransitions(groups);
 
-	private static void updateGroupTransitions(Set<Group> groups) {
+		State minimizedInitialState = null;
+		HashMap<Group, State> minimizedAFDStates = new HashMap<>();
+		HashSet<State> minimizedFinalStates = new HashSet<>();
 		for (Group group : groups) {
-			updateGroupTransition(group, groups);
+			State state = new State(group.getName());
+			if (group.contains(original.getInitialState())) {
+				minimizedInitialState = state;
+			} else if (group.containsAny(original.getFinalStates())) {
+				minimizedFinalStates.add(state);
+			}
+			minimizedAFDStates.put(group, state);
+		}
+
+		for (Entry<Group, State> entry : minimizedAFDStates.entrySet()) {
+			for (GroupTransition groupTransition : entry.getKey().getGroupTransitions()) {
+				entry.getValue().addTransition(groupTransition.getConsumed(), minimizedAFDStates.get(groupTransition.getDestination()));
+			}
+		}
+
+		return new AFD(minimizedInitialState, minimizedAFDStates.values(), minimizedFinalStates);
+
+	}
+
+	private static void updateTransitions(Set<Group> groups) {
+		for (Group group : groups) {
+			ImmutableSet.Builder<GroupTransition> groupTransitions = ImmutableSet.builder();
+			for (Transition transition : group.getStates().iterator().next().getTransitions()) {
+				groupTransitions.add(new GroupTransition(transition.getConsumed(), findGroup(groups, transition.getDestination())));
+			}
+			group.setGroupTransitions(groupTransitions.build());
 		}
 	}
 
-	private static void updateGroupTransition(Group group, Set<Group> groups) {
-		LinkedHashMap<Symbol, Group> groupTransitions = new LinkedHashMap<>();
-		State state = group.iterator().next();
-		for (Transition transition : state.getTransitions()) {
-			groupTransitions.put(transition.getConsumed(), findGroup(groups, transition.getDestination()));
+	private static GroupBuilder createGroup(Set<Group> groups, State state) {
+		GroupBuilder builder = Group.builder().add(state);
+		for (Transition trans : state.getTransitions()) {
+			builder.addTransition(trans.getConsumed(), findGroup(groups, trans.getDestination()));
 		}
-		group.setGroupTransitions(groupTransitions);
+		return builder;
+	}
+
+	private static GroupBuilder findGroupBuilder(Set<Group> groups, Set<GroupBuilder> groupBuilders, State state) {
+		for (GroupBuilder builder : groupBuilders) {
+			boolean found = true;
+			for (Transition trans : state.getTransitions()) {
+				if (!builder.containsTransition(trans.getConsumed(), findGroup(groups, trans.getDestination()))) {
+					found = false;
+					break;
+				}
+			}
+			if (found) {
+				return builder;
+			}
+		}
+		return null;
 	}
 
 	private static Group findGroup(Set<Group> groups, State state) {
@@ -77,27 +125,5 @@ public class AFDMinimizer {
 			}
 		}
 		return null;
-	}
-
-	private static Group findDestinationGroup(State state, Set<Group> groups) {
-		Iterator<Transition> trans = state.getTransitions().iterator();
-		while (trans.hasNext()) {
-			Transition currentTrans = trans.next();
-			State destination = currentTrans.getDestination();
-			Group destinationGroup = group.getGroupTransitions().get(currentTrans.getConsumed());
-			match = match && group.contains(state) && destinationGroup.contains(destination);
-		}
-	}
-
-	private static boolean matchTransitions(State state, Group group) {
-		boolean match = true;
-		Iterator<Transition> trans = state.getTransitions().iterator();
-		while (trans.hasNext() && match) {
-			Transition currentTrans = trans.next();
-			State destination = currentTrans.getDestination();
-			Group destinationGroup = group.getGroupTransitions().get(currentTrans.getConsumed());
-			match = match && group.contains(state) && destinationGroup.contains(destination);
-		}
-		return match;
 	}
 }
