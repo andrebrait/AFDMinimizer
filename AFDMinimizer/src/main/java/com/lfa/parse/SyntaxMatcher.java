@@ -51,8 +51,6 @@ public class SyntaxMatcher {
 			if (Constants.SEPARATORS.contains(iStr)) {
 				if (sb.length() > 0) {
 					returnList.add(sb.toString());
-				} else {
-
 				}
 				returnList.add(iStr);
 				sb = new StringBuilder();
