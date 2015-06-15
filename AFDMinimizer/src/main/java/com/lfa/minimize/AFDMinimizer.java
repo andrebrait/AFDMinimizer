@@ -29,6 +29,9 @@ public class AFDMinimizer {
 		groups.addAll(GroupBuilder.buildInitialGroups(original));
 
 		do {
+
+			updateTransitions(groups);
+
 			HashSet<GroupBuilder> groupsToAdd = new HashSet<>();
 			for (Group group : groups) {
 				if (group.size() == 1) {
@@ -59,8 +62,6 @@ public class AFDMinimizer {
 			}
 		} while (modified);
 
-		updateTransitions(groups);
-
 		State minimizedInitialState = null;
 		HashMap<Group, State> minimizedAFDStates = new HashMap<>();
 		HashSet<State> minimizedFinalStates = new HashSet<>();
@@ -84,6 +85,13 @@ public class AFDMinimizer {
 
 	}
 
+	/**
+	 * Atualiza as transições dos grupos com base nas últimas alterações
+	 * ocorridas.
+	 *
+	 * @param groups
+	 *            Os grupos.
+	 */
 	private static void updateTransitions(Set<Group> groups) {
 		for (Group group : groups) {
 			ImmutableSet.Builder<GroupTransition> groupTransitions = ImmutableSet.builder();
@@ -94,6 +102,15 @@ public class AFDMinimizer {
 		}
 	}
 
+	/**
+	 * Cria um grupo com o estado passado.
+	 *
+	 * @param groups
+	 *            O conjunto de grupos.
+	 * @param state
+	 *            O estado.
+	 * @return O builder.
+	 */
 	private static GroupBuilder createGroup(Set<Group> groups, State state) {
 		GroupBuilder builder = Group.builder().add(state);
 		for (Transition trans : state.getTransitions()) {
@@ -102,6 +119,17 @@ public class AFDMinimizer {
 		return builder;
 	}
 
+	/**
+	 * Encontra o builder no qual um estado está.
+	 *
+	 * @param groups
+	 *            O conjunto de grupos.
+	 * @param groupBuilders
+	 *            O conjunto de builders.
+	 * @param state
+	 *            O estado.
+	 * @return O builder.
+	 */
 	private static GroupBuilder findGroupBuilder(Set<Group> groups, Set<GroupBuilder> groupBuilders, State state) {
 		for (GroupBuilder builder : groupBuilders) {
 			boolean found = true;
@@ -118,6 +146,15 @@ public class AFDMinimizer {
 		return null;
 	}
 
+	/**
+	 * Encontra o grupo no qual um estado está.
+	 *
+	 * @param groups
+	 *            O conjunto de grupos.
+	 * @param state
+	 *            O estado.
+	 * @return O grupo que possui o estado.
+	 */
 	private static Group findGroup(Set<Group> groups, State state) {
 		for (Group group : groups) {
 			if (group.contains(state)) {

@@ -145,37 +145,6 @@ public final class Group {
 				Group nonFinalGroup = builder().addAll(CollectionUtils.removeAll(original.getStates(), original.getFinalStates())).buildProcess();
 				Group finalGroup = builder().addAll(original.getFinalStates()).buildProcess();
 
-				State nonFinalState = null;
-				for (State state : nonFinalGroup.getStates()) {
-					if (!state.getTransitions().isEmpty()) {
-						nonFinalState = state;
-						break;
-					}
-				}
-				State finalState = null;
-				for (State state : finalGroup.getStates()) {
-					if (!state.getTransitions().isEmpty()) {
-						finalState = state;
-						break;
-					}
-				}
-
-				ImmutableSet.Builder<GroupTransition> builderNonFinal = ImmutableSet.builder();
-				ImmutableSet.Builder<GroupTransition> builderFinal = ImmutableSet.builder();
-
-				for (Transition transition : nonFinalState.getTransitions()) {
-					Group destinationGroup = nonFinalGroup.contains(transition.getDestination()) ? nonFinalGroup : finalGroup;
-					builderNonFinal.add(new GroupTransition(transition.getConsumed(), destinationGroup));
-				}
-
-				for (Transition transition : finalState.getTransitions()) {
-					Group destinationGroup = nonFinalGroup.contains(transition.getDestination()) ? nonFinalGroup : finalGroup;
-					builderFinal.add(new GroupTransition(transition.getConsumed(), destinationGroup));
-				}
-
-				nonFinalGroup.setGroupTransitions(builderNonFinal.build());
-				finalGroup.setGroupTransitions(builderFinal.build());
-
 				builtInitial = true;
 
 				return new HashSet<>(Arrays.asList(nonFinalGroup, finalGroup));

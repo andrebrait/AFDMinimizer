@@ -28,7 +28,7 @@ public class MainClass {
 			// ArgumentResolver.resolveArguments(args);
 
 			File inputFile = null;
-			String input = "E(6):A,B,C,D,E,F; A(2):0,1; T(2): A->{A,B}, B->{D,C}; I(1):A; F(1):A;";
+			String input = "E(6):A,B,C,D,E,F; A(2):0,1; T(6): A->{A,B}, B->{D,C}, C -> {A, B}, D -> {E, F}, E -> {D, C}, F -> {E,F}; I(1):A; F(1):A;";
 			Charset detectedCharSet = null;
 
 			// try {
