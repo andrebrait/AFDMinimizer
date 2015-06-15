@@ -1,5 +1,6 @@
 package com.lfa.parse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,11 +28,42 @@ public class SyntaxMatcher {
 	 */
 	public static List<String> validate(String input) {
 		input = StringUtils.deleteWhitespace(input);
-		List<String> decomposedInput = Arrays.asList(StringUtils.splitByCharacterType(input.toUpperCase()));
+		List<String> decomposedInput = splitBySeparators(input);
 		List<String> intersect = ListUtils.retainAll(decomposedInput, Constants.SEPARATORS);
 		createValidationAPD().run(StringUtils.join(intersect.toArray(), StringUtils.EMPTY));
 		List<String> consistencyStr = ListUtils.removeAll(decomposedInput, Constants.SEPARATORS_MINUS_SEMICOLON);
 		return consistencyStr;
+	}
+
+	/**
+	 * Divide a string entre os separadores.
+	 *
+	 * @param str
+	 *            A string
+	 * @return A lista com as strings separadas.
+	 */
+	private static List<String> splitBySeparators(String str) {
+		List<String> returnList = new ArrayList<>();
+		char[] chars = str.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < chars.length; i++) {
+			String iStr = String.valueOf(chars[i]);
+			if (Constants.SEPARATORS.contains(iStr)) {
+				if (sb.length() > 0) {
+					returnList.add(sb.toString());
+				} else {
+
+				}
+				returnList.add(iStr);
+				sb = new StringBuilder();
+				continue;
+			}
+			sb.append(iStr);
+		}
+		if (sb.length() > 0) {
+			returnList.add(sb.toString());
+		}
+		return returnList;
 	}
 
 	/**

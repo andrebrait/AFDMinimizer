@@ -78,5 +78,5 @@ public class Constants {
 	 * Números possíveis de parâmetros (contando nome do programa e nomes dos
 	 * arquivos) que este programa pode receber
 	 */
-	public static final ImmutableSet<Integer> POSSIBLE_PARAM_NUM = ImmutableSet.<Integer> builder().add(2, 4, 6).build();
+	public static final ImmutableSet<Integer> POSSIBLE_PARAM_NUM = ImmutableSet.<Integer> builder().add(1, 3, 5).build();
 }

@@ -32,7 +32,7 @@ public class ArgumentResolver {
 		if (!Constants.POSSIBLE_PARAM_NUM.contains(args.length)) {
 			throwValidationException(args);
 		}
-		for (int i = 1; i < args.length; i++) {
+		for (int i = 0; i < args.length; i++) {
 			if (paramOptions.contains(args[i])) {
 				if (!StringUtils.endsWithIgnoreCase(args[++i], Constants.DOT_EXT)) {
 					throwValidationException(args);
@@ -63,9 +63,8 @@ public class ArgumentResolver {
 	 *            A lista de argumentos
 	 */
 	private static void throwValidationException(String[] args) {
-		throw new ValidationException(ErrorType.OTHER, new StringBuilder().append("Usar: ").append(args.length > 0 ? args[0] : null).append(" <Opções> [AFD de entrada em formato AFD]")
-				.append(Constants.NEWLINE).append(Constants.TAB).append("Opções:").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_ORIGINAL).append(Constants.TAB)
-				.append("AFD original em formato DOT").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_MINIMIZED).append(Constants.TAB).append("AFD reduzido em formato DOT")
-				.toString());
+		throw new ValidationException(ErrorType.OTHER, new StringBuilder().append("Usar: ").append(" <Opções> [AFD de entrada em formato AFD]").append(Constants.NEWLINE).append(Constants.TAB)
+				.append("Opções:").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_ORIGINAL).append(Constants.TAB).append("AFD original em formato DOT")
+				.append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_MINIMIZED).append(Constants.TAB).append("AFD reduzido em formato DOT").toString());
 	}
 }
