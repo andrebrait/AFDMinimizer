@@ -33,6 +33,7 @@ public class AFDMinimizer {
 			updateTransitions(groups);
 
 			HashSet<GroupBuilder> groupsToAdd = new HashSet<>();
+			HashMap<Group, HashSet<State>> statesToRemove = new HashMap<>();
 			for (Group group : groups) {
 				if (group.size() == 1) {
 					continue;
@@ -54,9 +55,12 @@ public class AFDMinimizer {
 					}
 				}
 				groupsToAdd.addAll(groupBuildersForThisGroup);
-				group.removeAll(statesToRemoveFromThisGroup);
+				statesToRemove.put(group, statesToRemoveFromThisGroup);
 			}
 			modified = CollectionUtils.isNotEmpty(groupsToAdd);
+			for (Entry<Group, HashSet<State>> entry : statesToRemove.entrySet()) {
+				entry.getKey().removeAll(entry.getValue());
+			}
 			for (GroupBuilder newGroup : groupsToAdd) {
 				groups.add(newGroup.build());
 			}
@@ -69,7 +73,8 @@ public class AFDMinimizer {
 			State state = new State(group.getName());
 			if (group.contains(original.getInitialState())) {
 				minimizedInitialState = state;
-			} else if (group.containsAny(original.getFinalStates())) {
+			}
+			if (group.containsAny(original.getFinalStates())) {
 				minimizedFinalStates.add(state);
 			}
 			minimizedAFDStates.put(group, state);

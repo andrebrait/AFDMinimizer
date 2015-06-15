@@ -45,7 +45,7 @@ public class Constants {
 	public static final int LINES = 5;
 
 	/* Constantes para facilitar formatação */
-	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = "\n";
+	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = "\n", QUOTE = "\"";
 
 	/** Constante da opção de arquivo de saída com AFD original */
 	public static final String OPT_ORIGINAL = "-o";
