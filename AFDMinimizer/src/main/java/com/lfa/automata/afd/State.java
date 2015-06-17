@@ -1,6 +1,6 @@
 package com.lfa.automata.afd;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,7 +52,7 @@ public class State {
 	}
 
 	private final String name;
-	private final HashSet<Transition> transitions;
+	private final LinkedHashSet<Transition> transitions;
 
 	/**
 	 * O próximo estado, sendo ele o estado de destino da última transição
@@ -70,7 +70,7 @@ public class State {
 	 */
 	public State(String name) {
 		this.name = name;
-		this.transitions = new HashSet<>();
+		this.transitions = new LinkedHashSet<>();
 	}
 
 	/**

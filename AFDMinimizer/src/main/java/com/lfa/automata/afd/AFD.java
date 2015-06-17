@@ -8,8 +8,8 @@ import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.Automata;
+import com.lfa.collections.ImmutableLinkedSet;
 
 /**
  * A classe AFD. Representa um AFD no sistema. É capaz de reconhecer palavras
@@ -21,8 +21,8 @@ import com.lfa.automata.Automata;
 public class AFD implements Automata {
 
 	private final State initialState;
-	private final ImmutableSet<State> states;
-	private final ImmutableSet<State> finalStates;
+	private final ImmutableLinkedSet<State> states;
+	private final ImmutableLinkedSet<State> finalStates;
 
 	/**
 	 * Instancia um novo AFD.
@@ -36,8 +36,8 @@ public class AFD implements Automata {
 	 */
 	public AFD(State initialState, Collection<State> states, Collection<State> finalStates) {
 		this.initialState = initialState;
-		this.states = ImmutableSet.<State> builder().addAll(states).build();
-		this.finalStates = ImmutableSet.<State> builder().addAll(finalStates).build();
+		this.states = ImmutableLinkedSet.<State> builder().addAll(states).build();
+		this.finalStates = ImmutableLinkedSet.<State> builder().addAll(finalStates).build();
 	}
 
 	@Override

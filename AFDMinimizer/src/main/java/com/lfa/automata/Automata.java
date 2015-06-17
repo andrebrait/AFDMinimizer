@@ -1,7 +1,7 @@
 package com.lfa.automata;
 
-import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.afd.State;
+import com.lfa.collections.ImmutableLinkedSet;
 
 /**
  * Interface Automata. Contém os métodos que todos os autômatos devem poder
@@ -29,14 +29,14 @@ public interface Automata {
 	 *
 	 * @return Os estados do autômato.
 	 */
-	ImmutableSet<? extends State> getStates();
+	ImmutableLinkedSet<? extends State> getStates();
 
 	/**
 	 * Retorna o conjunto imutável de estados iniais de um autômato.
 	 *
 	 * @return Os estados finais do autômato.
 	 */
-	ImmutableSet<? extends State> getFinalStates();
+	ImmutableLinkedSet<? extends State> getFinalStates();
 
 	/**
 	 * Retorna o tamanho do autômato.

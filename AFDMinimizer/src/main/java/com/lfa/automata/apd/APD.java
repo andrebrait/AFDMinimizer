@@ -10,8 +10,8 @@ import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.Automata;
+import com.lfa.collections.ImmutableLinkedSet;
 
 /**
  * A classe APD. Representa um APD.
@@ -22,8 +22,8 @@ import com.lfa.automata.Automata;
 public class APD implements Automata {
 
 	private final APDState initialState;
-	private final ImmutableSet<APDState> states;
-	private final ImmutableSet<APDState> finalStates;
+	private final ImmutableLinkedSet<APDState> states;
+	private final ImmutableLinkedSet<APDState> finalStates;
 	private final Deque<String> stack;
 
 	/**
@@ -38,8 +38,8 @@ public class APD implements Automata {
 	 */
 	public APD(APDState initialState, Collection<APDState> states, Collection<APDState> finalStates) {
 		this.initialState = initialState;
-		this.states = ImmutableSet.<APDState> builder().addAll(states).build();
-		this.finalStates = ImmutableSet.<APDState> builder().addAll(finalStates).build();
+		this.states = ImmutableLinkedSet.<APDState> builder().addAll(states).build();
+		this.finalStates = ImmutableLinkedSet.<APDState> builder().addAll(finalStates).build();
 		this.stack = new ArrayDeque<>();
 	}
 

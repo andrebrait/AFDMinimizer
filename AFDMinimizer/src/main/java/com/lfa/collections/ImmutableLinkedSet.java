@@ -1,8 +1,10 @@
 package com.lfa.collections;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +16,9 @@ import com.google.common.collect.UnmodifiableListIterator;
 
 @ToString(callSuper = false, of = "list")
 @EqualsAndHashCode(callSuper = false, of = "set")
-public final class ImmutableLinkedSet<E> implements List<E> {
+public final class ImmutableLinkedSet<E> implements Set<E>, Serializable {
+
+	private static final long serialVersionUID = -4634534523581400045L;
 
 	private final ImmutableSet<E> set;
 	private final ImmutableList<E> list;
@@ -43,6 +47,10 @@ public final class ImmutableLinkedSet<E> implements List<E> {
 		public final Builder<E> addAll(Collection<E> collection) {
 			listSet.addAll(collection);
 			return this;
+		}
+
+		public final int size() {
+			return listSet.size();
 		}
 
 		public final ImmutableLinkedSet<E> build() {
@@ -91,58 +99,28 @@ public final class ImmutableLinkedSet<E> implements List<E> {
 		return set.containsAll(c);
 	}
 
-	@Override
 	public E get(int index) {
 		return list.get(index);
 	}
 
-	@Override
 	public int indexOf(Object o) {
 		return list.indexOf(o);
 	}
 
-	@Override
 	public int lastIndexOf(Object o) {
 		return list.lastIndexOf(o);
 	}
 
-	@Override
 	public UnmodifiableListIterator<E> listIterator() {
 		return list.listIterator();
 	}
 
-	@Override
 	public UnmodifiableListIterator<E> listIterator(int index) {
 		return list.listIterator(index);
 	}
 
-	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 		return list.subList(fromIndex, toIndex);
-	}
-
-	@Deprecated
-	@Override
-	public boolean addAll(int index, Collection<? extends E> c) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Deprecated
-	@Override
-	public E set(int index, E element) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Deprecated
-	@Override
-	public void add(int index, E element) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Deprecated
-	@Override
-	public E remove(int index) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Deprecated
@@ -179,6 +157,10 @@ public final class ImmutableLinkedSet<E> implements List<E> {
 	@Override
 	public boolean remove(Object o) {
 		throw new UnsupportedOperationException();
+	}
+
+	public static <E> Builder<E> builder() {
+		return new Builder<E>();
 	}
 
 }
