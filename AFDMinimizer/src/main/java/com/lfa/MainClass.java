@@ -81,7 +81,7 @@ public class MainClass {
 				if (fileMap.containsKey(Constants.OPT_MINIMIZED)) {
 					OutputPrinter.printToFile(outputAFD, fileMap.get(Constants.OPT_MINIMIZED), "AFD Minimizado", detectedCharSet);
 				}
-				if (inputAFD.size() != outputAFD.size()) {
+				if (inputAFD.size() == outputAFD.size()) {
 					System.out.println("AFD já era mínimo.");
 				} else {
 					System.out.println("AFD não era mínimo e foi minimizado.");

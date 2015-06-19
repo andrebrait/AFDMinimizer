@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.lfa</groupId>
 	<artifactId>AFDMinimizer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-RELEASE</version>
 	<name>AFD Minimizer</name>
 	<description>Deterministic Finite Automata minimizer</description>
 
