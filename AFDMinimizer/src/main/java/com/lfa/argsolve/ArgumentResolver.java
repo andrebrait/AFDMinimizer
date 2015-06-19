@@ -30,26 +30,33 @@ public class ArgumentResolver {
 		List<String> paramOptions = Arrays.asList(Constants.OPT_ORIGINAL, Constants.OPT_MINIMIZED);
 		HashMap<String, String> mapArgs = new HashMap<>(Constants.PARAM_NUM);
 		if (!Constants.POSSIBLE_PARAM_NUM.contains(args.length)) {
-			throwValidationException(args);
+			throwValidationException();
 		}
-		for (int i = 0; i < args.length; i++) {
-			if (paramOptions.contains(args[i])) {
-				if (!StringUtils.endsWithIgnoreCase(args[++i], Constants.DOT_EXT)) {
-					throwValidationException(args);
+		try {
+			for (int i = 0; i < args.length; i++) {
+				if (paramOptions.contains(args[i])) {
+					if (!StringUtils.endsWithIgnoreCase(args[++i], Constants.DOT_EXT)) {
+						throwValidationException();
+					}
+					mapArgs.put(args[i - 1], args[i]);
+				} else if (StringUtils.equals(args[i].trim(), Constants.AUTOTEST)) {
+					mapArgs.put(Constants.AUTOTEST, args[i]);
+				} else if (!StringUtils.endsWithIgnoreCase(args[i], Constants.AFD_EXT)) {
+					throwValidationException();
+				} else {
+					mapArgs.put(Constants.INPUT, args[i]);
 				}
-				mapArgs.put(args[i - 1], args[i]);
-			} else if (args[i].equals(Constants.AUTOTEST)) {
-				mapArgs.put(Constants.AUTOTEST, args[i]);
-			} else if (!StringUtils.endsWithIgnoreCase(args[i], Constants.AFD_EXT)) {
-				throwValidationException(args);
-			} else {
-				mapArgs.put(Constants.INPUT, args[i]);
 			}
-		}
-		if (mapArgs.containsKey(Constants.OPT_ORIGINAL) && mapArgs.containsKey(Constants.OPT_MINIMIZED)) {
-			if (mapArgs.get(Constants.OPT_ORIGINAL).equals(mapArgs.get(Constants.OPT_MINIMIZED))) {
-				throwValidationException(args);
+			if (mapArgs.containsKey(Constants.OPT_ORIGINAL) && mapArgs.containsKey(Constants.OPT_MINIMIZED)) {
+				if (mapArgs.get(Constants.OPT_ORIGINAL).equals(mapArgs.get(Constants.OPT_MINIMIZED))) {
+					throwValidationException();
+				}
 			}
+		} catch (Exception ex) {
+			if (ex instanceof ValidationException) {
+				throw ex;
+			}
+			throwValidationException();
 		}
 		ImmutableMap.Builder<String, File> returnMap = ImmutableMap.builder();
 		mapArgs.entrySet().forEach(entry -> returnMap.put(entry.getKey(), new File(entry.getValue())));
@@ -66,7 +73,7 @@ public class ArgumentResolver {
 	 * @param argList
 	 *            A lista de argumentos
 	 */
-	private static void throwValidationException(String[] args) {
+	private static void throwValidationException() {
 		throw new ValidationException(ErrorType.OTHER, new StringBuilder().append("Usar: java -jar [nome do jar]").append(" <Opções> [AFD de entrada em formato AFD]").append(Constants.NEWLINE)
 				.append(Constants.TAB).append("Opções:").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_ORIGINAL).append(Constants.TAB).append("AFD original em formato DOT")
 				.append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_MINIMIZED).append(Constants.TAB).append("AFD reduzido em formato DOT").append(Constants.NEWLINE)

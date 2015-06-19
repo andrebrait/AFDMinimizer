@@ -77,11 +77,11 @@ public class Constants {
 	 * O número máximo de parâmetros de linha de comando que este programa
 	 * aceita
 	 */
-	public static final Integer PARAM_NUM = 3;
+	public static final Integer PARAM_NUM = 4;
 
 	/**
 	 * Números possíveis de parâmetros (contando nome do programa e nomes dos
 	 * arquivos) que este programa pode receber
 	 */
-	public static final ImmutableSet<Integer> POSSIBLE_PARAM_NUM = ImmutableSet.<Integer> builder().add(1, 3, 5, 6).build();
+	public static final ImmutableSet<Integer> POSSIBLE_PARAM_NUM = ImmutableSet.<Integer> builder().add(1, 2, 4, 6).build();
 }
