@@ -46,8 +46,10 @@ public class ArgumentResolver {
 				mapArgs.put(Constants.INPUT, args[i]);
 			}
 		}
-		if (mapArgs.get(Constants.OPT_ORIGINAL).equals(mapArgs.get(Constants.OPT_MINIMIZED))) {
-			throwValidationException(args);
+		if (mapArgs.containsKey(Constants.OPT_ORIGINAL) && mapArgs.containsKey(Constants.OPT_MINIMIZED)) {
+			if (mapArgs.get(Constants.OPT_ORIGINAL).equals(mapArgs.get(Constants.OPT_MINIMIZED))) {
+				throwValidationException(args);
+			}
 		}
 		ImmutableMap.Builder<String, File> returnMap = ImmutableMap.builder();
 		mapArgs.entrySet().forEach(entry -> returnMap.put(entry.getKey(), new File(entry.getValue())));
