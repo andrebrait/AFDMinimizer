@@ -15,6 +15,8 @@ import com.lfa.constants.Constants;
 /**
  * Classe SyntaxMatcher. Contém métodos para validar a sintaxe do arquivo de
  * entrada de dados.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public class SyntaxMatcher {
 

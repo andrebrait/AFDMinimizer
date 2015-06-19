@@ -15,6 +15,8 @@ import com.lfa.collections.ImmutableLinkedSet;
 
 /**
  * A classe APD. Representa um APD.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 @Data
 @EqualsAndHashCode(callSuper = false, of = { "initialState", "states", "finalStates" })

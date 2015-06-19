@@ -14,6 +14,8 @@ import com.lfa.constants.Constants;
 /**
  * Classe OutputPrinter. Contém métodos para gerar uma saída com base em um
  * objeto AFD.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public class OutputPrinter {
 

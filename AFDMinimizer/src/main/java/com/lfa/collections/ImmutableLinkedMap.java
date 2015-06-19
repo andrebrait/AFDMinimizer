@@ -3,7 +3,6 @@ package com.lfa.collections;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,145 +10,123 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.UnmodifiableListIterator;
+import com.google.common.collect.ImmutableMap;
 
-@ToString(callSuper = false, of = "list")
-@EqualsAndHashCode(callSuper = false, of = "set")
-public final class ImmutableLinkedMap<K, E> implements Map<K, E>, Serializable {
+/**
+ * The Class ImmutableLinkedMap. A very precarious implementation of an
+ * Immutable linked map, which maintains iteration order. Similar to
+ * {@link LinkedHashMap} with building system similar to that of Google's
+ * {@link ImmutableMap}.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
+ *
+ * @param <K>
+ *            the key type
+ * @param <V>
+ *            the value type
+ */
+@ToString(callSuper = false, of = "map")
+@EqualsAndHashCode(callSuper = false, of = { "map" })
+public final class ImmutableLinkedMap<K, V> implements Map<K, V>, Serializable {
 
 	private static final long serialVersionUID = -4634534523581400045L;
 
-	private final ImmutableSet<E> set;
-	private final ImmutableList<E> list;
+	private final LinkedHashMap<K, V> map;
 
 	public static final class Builder<K, V> {
 
-		private final LinkedHashMap<K, V> listSet;
+		private final LinkedHashMap<K, V> listMap;
 
 		public Builder() {
-			this.listSet = new LinkedHashMap<K, V>();
+			this.listMap = new LinkedHashMap<K, V>();
 		}
 
 		public final Builder<K, V> put(K key, V value) {
-			listSet.put(key, v);
+			listMap.put(key, value);
 			return this;
 		}
 
-		@SafeVarargs
-		public final Builder<K, V> add(V... element) {
-			for (V e : element) {
-				listSet.add(e);
-			}
-			return this;
-		}
-
-		public final Builder<K, V> addAll(Collection<V> collection) {
-			listSet.addAll(collection);
+		public final Builder<K, V> addAll(Map<K, V> collection) {
+			listMap.putAll(collection);
 			return this;
 		}
 
 		public final ImmutableLinkedMap<K, V> build() {
-			return new ImmutableLinkedMap<K, V>(ImmutableSet.<V> builder().addAll(listSet).build(), ImmutableList.<V> builder().addAll(listSet).build());
+			return new ImmutableLinkedMap<K, V>(new LinkedHashMap<>(listMap));
 		}
 
 	}
 
-	private ImmutableLinkedMap(ImmutableSet<E> set, ImmutableList<E> list) {
-		this.set = set;
-		this.list = list;
+	private ImmutableLinkedMap(LinkedHashMap<K, V> map) {
+		this.map = map;
 	}
 
 	@Override
 	public int size() {
-		return set.size();
+		return map.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return set.isEmpty();
-	}
-
-	public E get(int index) {
-		return list.get(index);
-	}
-
-	public int indexOf(Object o) {
-		return list.indexOf(o);
-	}
-
-	public int lastIndexOf(Object o) {
-		return list.lastIndexOf(o);
-	}
-
-	public UnmodifiableListIterator<E> listIterator() {
-		return list.listIterator();
-	}
-
-	public UnmodifiableListIterator<E> listIterator(int index) {
-		return list.listIterator(index);
-	}
-
-	public List<E> subList(int fromIndex, int toIndex) {
-		return list.subList(fromIndex, toIndex);
-	}
-
-	public static <K, E> Builder<K, E> builder() {
-		return new Builder<K, E>();
+		return map.isEmpty();
 	}
 
 	@Override
 	public boolean containsKey(Object key) {
-		// TODO Auto-generated method stub
-		return false;
+		return map.containsKey(key);
 	}
 
 	@Override
 	public boolean containsValue(Object value) {
-		// TODO Auto-generated method stub
-		return false;
+		return map.containsValue(value);
 	}
 
 	@Override
-	public E get(Object key) {
-		// TODO Auto-generated method stub
-		return null;
+	public V get(Object key) {
+		return map.get(key);
 	}
 
+	@Deprecated
 	@Override
-	public E put(K key, E value) {
-		// TODO Auto-generated method stub
-		return null;
+	public V put(K key, V value) {
+		throw new UnsupportedOperationException();
 	}
 
+	@Deprecated
 	@Override
-	public E remove(Object key) {
-		// TODO Auto-generated method stub
-		return null;
+	public V remove(Object key) {
+		throw new UnsupportedOperationException();
 	}
 
+	@Deprecated
 	@Override
-	public void putAll(Map<? extends K, ? extends E> m) {
-		// TODO Auto-generated method stub
+	public void putAll(Map<? extends K, ? extends V> m) {
+		throw new UnsupportedOperationException();
+	}
 
+	@Deprecated
+	@Override
+	public void clear() {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Set<K> keySet() {
-		// TODO Auto-generated method stub
-		return null;
+		return ImmutableLinkedSet.<K> builder().addAll(map.keySet()).build();
 	}
 
 	@Override
-	public Collection<E> values() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<V> values() {
+		return ImmutableList.<V> builder().addAll(map.values()).build();
 	}
 
 	@Override
-	public Set<java.util.Map.Entry<K, E>> entrySet() {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Map.Entry<K, V>> entrySet() {
+		return ImmutableLinkedSet.<Map.Entry<K, V>> builder().addAll(map.entrySet()).build();
+	}
+
+	public static <K, V> Builder<K, V> builder() {
+		return new Builder<>();
 	}
 
 }

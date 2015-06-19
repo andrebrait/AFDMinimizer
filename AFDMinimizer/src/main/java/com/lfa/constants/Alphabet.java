@@ -9,11 +9,13 @@ import lombok.ToString;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.collect.ImmutableMap;
+import com.lfa.collections.ImmutableLinkedMap;
 
 /**
  * Classe Alphabet. Basicamente uma classe para armazenar os símbolos do
  * alfabeto do AFD.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 @Data
 @EqualsAndHashCode(callSuper = false, of = { "ordinalMap" })
@@ -45,8 +47,8 @@ public final class Alphabet {
 
 	public static final String LAMBDA = "\u03BB";
 
-	private final ImmutableMap<String, Symbol> symbolMap;
-	private final ImmutableMap<Integer, Symbol> ordinalMap;
+	private final ImmutableLinkedMap<String, Symbol> symbolMap;
+	private final ImmutableLinkedMap<Integer, Symbol> ordinalMap;
 
 	/**
 	 * Instancia um novo alfabeto com o conjunto de símbolos passado neste
@@ -67,8 +69,8 @@ public final class Alphabet {
 	 *            Os símbolos do alfabeto.
 	 */
 	public Alphabet(Collection<String> symbols) {
-		ImmutableMap.Builder<String, Symbol> symbolBuilder = new ImmutableMap.Builder<>();
-		ImmutableMap.Builder<Integer, Symbol> ordinalBuilder = new ImmutableMap.Builder<>();
+		ImmutableLinkedMap.Builder<String, Symbol> symbolBuilder = new ImmutableLinkedMap.Builder<>();
+		ImmutableLinkedMap.Builder<Integer, Symbol> ordinalBuilder = new ImmutableLinkedMap.Builder<>();
 		int order = 0;
 		for (String str : symbols) {
 			str = treat(str);

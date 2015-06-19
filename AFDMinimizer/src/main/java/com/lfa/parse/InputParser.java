@@ -21,6 +21,8 @@ import com.lfa.exception.ValidationException.ErrorType;
 /**
  * Classe InputParser. É utilizada para processar o arquivo de entrada do
  * minimizador de AFDs.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public class InputParser {
 

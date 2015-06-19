@@ -6,6 +6,8 @@ import lombok.ToString;
 /**
  * Classe ValidationException. É usada para lançar exceções de validação do
  * minimizador.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public class ValidationException extends RuntimeException {
 

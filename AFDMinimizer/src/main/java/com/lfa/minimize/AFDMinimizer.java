@@ -7,16 +7,18 @@ import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.afd.AFD;
 import com.lfa.automata.afd.State;
 import com.lfa.automata.afd.State.Transition;
+import com.lfa.collections.ImmutableLinkedSet;
 import com.lfa.minimize.Group.GroupBuilder;
 import com.lfa.minimize.Group.GroupTransition;
 
 /**
  * Classe AFDMinimizer. Contém métodos para minimizar um AFD e gerar um AFD de
  * saída.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public class AFDMinimizer {
 
@@ -99,7 +101,7 @@ public class AFDMinimizer {
 	 */
 	private static void updateTransitions(Set<Group> groups) {
 		for (Group group : groups) {
-			ImmutableSet.Builder<GroupTransition> groupTransitions = ImmutableSet.builder();
+			ImmutableLinkedSet.Builder<GroupTransition> groupTransitions = ImmutableLinkedSet.builder();
 			for (Transition transition : group.getStates().iterator().next().getTransitions()) {
 				groupTransitions.add(new GroupTransition(transition.getConsumed(), findGroup(groups, transition.getDestination())));
 			}

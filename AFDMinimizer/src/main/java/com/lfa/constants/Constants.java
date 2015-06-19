@@ -11,6 +11,8 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * Classe de constantes utilizadas pelo programa e métodos auxiliares.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public class Constants {
 
@@ -45,7 +47,7 @@ public class Constants {
 	public static final int LINES = 5;
 
 	/* Constantes para facilitar formatação */
-	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = "\n", QUOTE = "\"";
+	public static final String TAB = "\t", D_TAB = "\t\t", NEWLINE = System.lineSeparator(), QUOTE = "\"";
 
 	/** Constante da opção de arquivo de saída com AFD original */
 	public static final String OPT_ORIGINAL = "-o";
@@ -69,7 +71,7 @@ public class Constants {
 	public static final String DOT_EXT = ".dot", AFD_EXT = ".afd";
 
 	/** Sinalizador de autoteste */
-	public static boolean AUTOTEST = false;
+	public static final String AUTOTEST = "-autotest";
 
 	/**
 	 * O número máximo de parâmetros de linha de comando que este programa

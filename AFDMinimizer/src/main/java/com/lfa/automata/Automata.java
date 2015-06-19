@@ -6,6 +6,8 @@ import com.lfa.collections.ImmutableLinkedSet;
 /**
  * Interface Automata. Contém os métodos que todos os autômatos devem poder
  * executar, incluindo o processamento de uma entrada dada em uma String.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 public interface Automata {
 

@@ -14,6 +14,8 @@ import com.lfa.collections.ImmutableLinkedSet;
 /**
  * A classe AFD. Representa um AFD no sistema. É capaz de reconhecer palavras
  * através do método run.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 @Data
 @EqualsAndHashCode(callSuper = false, of = { "initialState", "states", "finalStates" })

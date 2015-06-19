@@ -14,6 +14,18 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
 import com.google.common.collect.UnmodifiableListIterator;
 
+/**
+ * The Class ImmutableLinkedSet. Works as an implementation of Google's
+ * {@link ImmutableSet} which maintains iteration order by storing a
+ * {@link ImmutableList} along with its set. Iteration order and criteria for
+ * insertion of elements is the same as in {@link LinkedHashSet} and its Builder
+ * works in a similar fashion to {@link ImmutableSet}'s Builder.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
+ *
+ * @param <E>
+ *            the element type
+ */
 @ToString(callSuper = false, of = "list")
 @EqualsAndHashCode(callSuper = false, of = "set")
 public final class ImmutableLinkedSet<E> implements Set<E>, Serializable {

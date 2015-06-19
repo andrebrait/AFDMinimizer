@@ -26,6 +26,8 @@ import com.lfa.exception.ValidationException.ErrorType;
  * Classe APDState. Classe desenhada para representar os estados de um APD. Não
  * suporta os métodos de adição da classe de estados do AFD, apesar de ter uma
  * colocação equivalente na modelagem dos autômatos.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

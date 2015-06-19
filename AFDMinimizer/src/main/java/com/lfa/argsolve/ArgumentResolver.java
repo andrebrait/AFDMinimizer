@@ -38,6 +38,8 @@ public class ArgumentResolver {
 					throwValidationException(args);
 				}
 				mapArgs.put(args[i - 1], args[i]);
+			} else if (args[i].equals(Constants.AUTOTEST)) {
+				mapArgs.put(Constants.AUTOTEST, args[i]);
 			} else if (!StringUtils.endsWithIgnoreCase(args[i], Constants.AFD_EXT)) {
 				throwValidationException(args);
 			} else {
@@ -63,8 +65,9 @@ public class ArgumentResolver {
 	 *            A lista de argumentos
 	 */
 	private static void throwValidationException(String[] args) {
-		throw new ValidationException(ErrorType.OTHER, new StringBuilder().append("Usar: ").append(" <Opções> [AFD de entrada em formato AFD]").append(Constants.NEWLINE).append(Constants.TAB)
-				.append("Opções:").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_ORIGINAL).append(Constants.TAB).append("AFD original em formato DOT")
-				.append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_MINIMIZED).append(Constants.TAB).append("AFD reduzido em formato DOT").toString());
+		throw new ValidationException(ErrorType.OTHER, new StringBuilder().append("Usar: java -jar [nome do jar]").append(" <Opções> [AFD de entrada em formato AFD]").append(Constants.NEWLINE)
+				.append(Constants.TAB).append("Opções:").append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_ORIGINAL).append(Constants.TAB).append("AFD original em formato DOT")
+				.append(Constants.NEWLINE).append(Constants.D_TAB).append(Constants.OPT_MINIMIZED).append(Constants.TAB).append("AFD reduzido em formato DOT").append(Constants.NEWLINE)
+				.append(Constants.D_TAB).append(Constants.AUTOTEST).append(Constants.TAB).append("Habilita autoteste do AFD com palavras geradas a partir do AFD original").toString());
 	}
 }

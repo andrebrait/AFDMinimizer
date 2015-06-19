@@ -16,6 +16,8 @@ import com.lfa.exception.ValidationException.ErrorType;
 
 /**
  * Classe State. Representa um estado de um AFD.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 @Data
 @EqualsAndHashCode(callSuper = false, of = "name")
@@ -110,6 +112,20 @@ public class State {
 	}
 
 	/**
+	 * Adiciona uma transição invertida. Na verdade, apenas adiciona uma
+	 * transição sem que se faça quaisquer checagens de consistência. Deve ser
+	 * usado SOMENTE pelo gerador de palavras.
+	 *
+	 * @param consumed
+	 *            O símbolo consumido.
+	 * @param destination
+	 *            O estado de destino.
+	 */
+	public void addReverseTransition(Symbol consumed, State destination) {
+		transitions.add(new Transition(this, consumed, destination));
+	}
+
+	/**
 	 * Consome o primeiro símbolo da string e passa ao próximo estado.
 	 *
 	 * @param str
@@ -119,7 +135,7 @@ public class State {
 	public String consume(String str) {
 		String firstChar = StringUtils.left(str, 1);
 		for (Transition trans : getTransitions()) {
-			if (trans.getConsumed().equals(firstChar)) {
+			if (trans.getConsumed().getStr().equals(firstChar)) {
 				setNext(trans.getDestination());
 				return StringUtils.removeStart(str, firstChar);
 			}

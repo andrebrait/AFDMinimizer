@@ -3,6 +3,7 @@ package com.lfa.minimize;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -16,10 +17,10 @@ import lombok.ToString;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import com.google.common.collect.ImmutableSet;
 import com.lfa.automata.afd.AFD;
 import com.lfa.automata.afd.State;
 import com.lfa.automata.afd.State.Transition;
+import com.lfa.collections.ImmutableLinkedSet;
 import com.lfa.constants.Alphabet.Symbol;
 import com.lfa.constants.Constants;
 import com.lfa.exception.ValidationException;
@@ -30,6 +31,8 @@ import com.lfa.exception.ValidationException.ErrorType;
  * grupo no algoritmo, não é possível adicionar estados a um grupo, apenas
  * remover. Apesar de muitas similaridades com {@link State}, a extensão não é
  * viável dada a diferença semântica entre ambas.
+ *
+ * @author Andre Brait (andrebrait@gmail.com)
  */
 @Data
 @EqualsAndHashCode(callSuper = false, of = "name")
@@ -77,8 +80,8 @@ public final class Group {
 		private static int NUM_GROUPS = 0;
 
 		private final String name;
-		private final HashSet<State> states;
-		private final HashSet<GroupTransition> groupTransitions;
+		private final LinkedHashSet<State> states;
+		private final LinkedHashSet<GroupTransition> groupTransitions;
 		private boolean built;
 
 		private static boolean builtInitial = false;
@@ -98,8 +101,8 @@ public final class Group {
 		 */
 		private GroupBuilder() {
 			this.name = "G" + (++NUM_GROUPS);
-			this.states = new HashSet<>();
-			this.groupTransitions = new HashSet<>();
+			this.states = new LinkedHashSet<>();
+			this.groupTransitions = new LinkedHashSet<>();
 			this.built = false;
 		}
 
@@ -250,11 +253,11 @@ public final class Group {
 	private final String name;
 
 	@Getter(value = AccessLevel.PROTECTED)
-	private final HashSet<State> states;
+	private final LinkedHashSet<State> states;
 
 	@Getter(value = AccessLevel.PROTECTED)
 	@Setter(value = AccessLevel.PROTECTED)
-	private ImmutableSet<GroupTransition> groupTransitions;
+	private ImmutableLinkedSet<GroupTransition> groupTransitions;
 
 	/**
 	 * Instancia um novo grupo atribuindo um nome automaticamente, com base no
@@ -264,9 +267,9 @@ public final class Group {
 	 *            Os estados do grupo
 	 */
 	private Group(String name, Collection<State> states, Collection<GroupTransition> groupTransitions) {
-		this.states = new HashSet<>(states);
+		this.states = new LinkedHashSet<>(states);
 		this.name = name;
-		this.groupTransitions = ImmutableSet.<GroupTransition> builder().addAll(groupTransitions).build();
+		this.groupTransitions = ImmutableLinkedSet.<GroupTransition> builder().addAll(groupTransitions).build();
 	}
 
 	/**
