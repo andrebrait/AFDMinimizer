@@ -2,6 +2,7 @@ package com.lfa.collections;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,34 +32,56 @@ public final class ImmutableLinkedMap<K, V> implements Map<K, V>, Serializable {
 
 	private static final long serialVersionUID = -4634534523581400045L;
 
-	private final LinkedHashMap<K, V> map;
+	private final ImmutableMap<K, V> map;
+	private final ImmutableLinkedSet<K> keySet;
+	private final ImmutableLinkedSet<Map.Entry<K, V>> entrySet;
+	private final ImmutableList<V> values;
 
 	public static final class Builder<K, V> {
 
-		private final LinkedHashMap<K, V> listMap;
+		private final LinkedHashMap<K, V> linkedMap;
 
 		public Builder() {
-			this.listMap = new LinkedHashMap<K, V>();
+			this.linkedMap = new LinkedHashMap<>();
 		}
 
 		public final Builder<K, V> put(K key, V value) {
-			listMap.put(key, value);
+			linkedMap.put(key, value);
 			return this;
 		}
 
 		public final Builder<K, V> addAll(Map<K, V> collection) {
-			listMap.putAll(collection);
+			linkedMap.putAll(collection);
 			return this;
 		}
 
 		public final ImmutableLinkedMap<K, V> build() {
-			return new ImmutableLinkedMap<K, V>(new LinkedHashMap<>(listMap));
-		}
+			ImmutableMap<K, V> finalMap = ImmutableMap.<K, V> builder().putAll(linkedMap).build();
 
+			ImmutableLinkedSet.Builder<K> keySet = ImmutableLinkedSet.<K> builder();
+			ImmutableLinkedSet.Builder<Map.Entry<K, V>> entrySet = ImmutableLinkedSet.<Map.Entry<K, V>> builder();
+			ImmutableList.Builder<V> values = ImmutableList.<V> builder();
+
+			HashMap<K, Map.Entry<K, V>> entryMap = new HashMap<>();
+			for (Map.Entry<K, V> entry : finalMap.entrySet()) {
+				entryMap.put(entry.getKey(), entry);
+			}
+
+			for (K key : linkedMap.keySet()) {
+				keySet.add(key);
+				entrySet.add(entryMap.get(key));
+				values.add(finalMap.get(key));
+			}
+
+			return new ImmutableLinkedMap<K, V>(finalMap, keySet.build(), entrySet.build(), values.build());
+		}
 	}
 
-	private ImmutableLinkedMap(LinkedHashMap<K, V> map) {
+	private ImmutableLinkedMap(ImmutableMap<K, V> map, ImmutableLinkedSet<K> keySet, ImmutableLinkedSet<Map.Entry<K, V>> entrySet, ImmutableList<V> values) {
 		this.map = map;
+		this.keySet = keySet;
+		this.entrySet = entrySet;
+		this.values = values;
 	}
 
 	@Override
@@ -112,17 +135,17 @@ public final class ImmutableLinkedMap<K, V> implements Map<K, V>, Serializable {
 
 	@Override
 	public Set<K> keySet() {
-		return ImmutableLinkedSet.<K> builder().addAll(map.keySet()).build();
+		return keySet;
 	}
 
 	@Override
 	public Collection<V> values() {
-		return ImmutableList.<V> builder().addAll(map.values()).build();
+		return values;
 	}
 
 	@Override
 	public Set<Map.Entry<K, V>> entrySet() {
-		return ImmutableLinkedSet.<Map.Entry<K, V>> builder().addAll(map.entrySet()).build();
+		return entrySet;
 	}
 
 	public static <K, V> Builder<K, V> builder() {
