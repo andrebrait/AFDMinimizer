@@ -100,8 +100,8 @@ public class SyntaxMatcher {
 		c.addTransition("-", "2", "K", c);
 		c.addTransition(">", "K", "L", c);
 		c.addTransition("{", "L", "M", c);
-		c.addTransition(",", "M", "N", c);
-		c.addTransition("}", "N", "O", c);
+		c.addTransition(",", "M", "M", c);
+		c.addTransition("}", "M", "O", c);
 		c.addTransition(",", "O", "2", c);
 		c.addTransition(";", "O", "3", d);
 
